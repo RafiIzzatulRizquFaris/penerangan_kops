@@ -1,5 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:penerangan_kops/constants.dart';
+import 'package:penerangan_kops/contract/login_contract.dart';
+import 'package:penerangan_kops/main_navigation.dart';
+import 'package:penerangan_kops/presenter/login_presenter.dart';
 import 'package:rflutter_alert/rflutter_alert.dart';
 
 class Login extends StatefulWidget{
@@ -9,12 +12,17 @@ class Login extends StatefulWidget{
   }
 }
 
-class LoginScreen extends State<Login>{
+class LoginScreen extends State<Login> implements LoginContractView{
 
   TextEditingController idController = TextEditingController();
   TextEditingController passwordController = TextEditingController();
+  LoginPresenter _loginPresenter;
   var isLoading;
   var isError;
+
+  LoginScreen(){
+    _loginPresenter = LoginPresenter(this);
+  }
 
   @override
   void initState() {
@@ -186,8 +194,8 @@ class LoginScreen extends State<Login>{
                 isLoading = true;
                 isError = false;
               });
-              // loginPresenter.loadLoginData(
-              //     idController.text.trim(), passwordController.text.trim());
+              _loginPresenter.loadLoginData(
+                  idController.text.trim(), passwordController.text.trim());
             } else if (idController.text.trim().length == 0) {
               errorAlert("Empty id", "Please fill id field");
             } else if (passwordController.text.trim().length == 0) {
@@ -257,5 +265,52 @@ class LoginScreen extends State<Login>{
         alertAlignment: Alignment.center,
       ),
     ).show();
+  }
+
+  @override
+  setLoginData(String status) {
+    if (status != null){
+      if (status == LoginResponse.SUCCESS){
+        setState(() {
+          isLoading = false;
+        });
+        if (!isLoading && !isError) {
+          Navigator.pushReplacement(context,
+              MaterialPageRoute(builder: (context) {
+                return MainNavigation();
+              }));
+        } else {
+          errorAlert("Error", "Something Wrong");
+        }
+      } else if (status == LoginResponse.WRONG_PASSWORD){
+        setState(() {
+          isError = true;
+          isLoading = false;
+        });
+        errorAlert("Wrong Password", "Wrong password on your account");
+      } else if (status == LoginResponse.FAILED){
+        setState(() {
+          isError = true;
+          isLoading = false;
+        });
+        errorAlert("Failed", "Please contact the admin to ask for account");
+      }
+    } else {
+      setState(() {
+        isError = true;
+        isLoading = false;
+      });
+      errorAlert("Data not found", "Check your connection");
+    }
+  }
+
+  @override
+  setOnErrorLogin(error) {
+    setState(() {
+      isError = true;
+      isLoading = false;
+    });
+    print(error);
+    errorAlert("Data not found", "Check your connection");
   }
 }
