@@ -75,14 +75,16 @@ class _HomeState extends State<Home> {
                         fontWeight: FontWeight.w600,
                         fontSize: 18.0),
                   ),
-                  trailing: Text("09:10"),
+                  trailing: Text("09:10", style: TextStyle(fontSize: 20.0),),
                   subtitle: Text("990 M"),
                 ),
               ),
             ),
           ),
         ],
-      ),
-    ));
+      ), 
+    ),
+    
+    );
   }
 }
