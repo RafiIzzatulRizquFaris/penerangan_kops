@@ -31,7 +31,7 @@ class SplashScreen extends State<Splash> {
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
                 Image.asset(
-                  "assets/lambang_kopassus.png",
+                  "assets/kopassus.png",
                   width: 200,
                   height: 200,
                   alignment: Alignment.center,
