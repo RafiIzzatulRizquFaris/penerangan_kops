@@ -1,8 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:penerangan_kops/constants.dart';
-
-import 'constants.dart';
-import 'constants.dart';
 import 'constants.dart';
 
 class Home extends StatefulWidget {
@@ -20,7 +17,7 @@ class _HomeState extends State<Home> {
           Container(
               height: 150,
               width: MediaQuery.of(context).size.width,
-              color: AppColor().accentColor,
+              color: AppColor.accentColor,
               child: Padding(
                 padding: EdgeInsets.all(20),
                 child: Column(
@@ -59,19 +56,19 @@ class _HomeState extends State<Home> {
               )),
           Expanded(
             child: Container(
-              color: AppColor().primaryColor,
+              color: AppColor.primaryColor,
               child: Padding(
                 padding: EdgeInsets.all(8),
                 child: ListTile(
                   leading: Icon(
                     Icons.person,
-                    color: AppColor().blackColor,
+                    color: AppColor.blackColor,
                     size: 40,
                   ),
                   title: Text(
                     "Kelelawar",
                     style: TextStyle(
-                        color: AppColor().blackColor,
+                        color: AppColor.blackColor,
                         fontWeight: FontWeight.w600,
                         fontSize: 18.0),
                   ),
