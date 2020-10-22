@@ -130,18 +130,7 @@ class _HomeState extends State<Home> {
           )),
         ],
       ),
-      bottomNavigationBar: BottomNavigationBar(
-        type: BottomNavigationBarType.fixed,
-        backgroundColor: AppColor().accentColor,
-        selectedItemColor: AppColor().primaryColor,
-        unselectedItemColor: AppColor().primaryColor,
-        items: [
-          BottomNavigationBarItem(icon: Icon(Icons.home), title: Text("Home")),
-          BottomNavigationBarItem(icon: Icon(Icons.calendar_today), title: Text("Kalender")),
-          BottomNavigationBarItem(icon: Icon(Icons.info_outline), title: Text("Panduan")),
-          BottomNavigationBarItem(icon: Icon(Icons.person_outline), title: Text("Profil")),
-        ],
-      ),
+     
       floatingActionButton: FloatingActionButton(onPressed: null,backgroundColor: AppColor().redColor,),
       floatingActionButtonLocation: FloatingActionButtonLocation.centerFloat,
     );
