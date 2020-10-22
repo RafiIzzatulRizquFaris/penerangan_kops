@@ -71,9 +71,9 @@ class SplashScreen extends State<Splash> {
 
   checkData() async {
     SharedPreferences preferences = await SharedPreferences.getInstance();
-    var name = preferences.get("nama");
+    var id = preferences.get("id");
     var password = preferences.get("password");
-    if (name.toString() != null && password.toString() != null){
+    if (id.toString() != null && password.toString() != null){
       startLaunching();
     } else {
     //  masukin ke home langsung
