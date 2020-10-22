@@ -1,0 +1,40 @@
+{
+  "project_info": {
+    "project_number": "1074104301026",
+    "firebase_url": "https://penerangan-kops.firebaseio.com",
+    "project_id": "penerangan-kops",
+    "storage_bucket": "penerangan-kops.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:1074104301026:android:185bb733d543bd7719b5bb",
+        "android_client_info": {
+          "package_name": "mil.kopasus.penerangan_kops"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "1074104301026-oi9hulste6ou3gomp7mb860vtn6fhpnj.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDvb2BxfauIWLZrw9QZN9ZT7fk4mJ44Ovo"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "1074104301026-oi9hulste6ou3gomp7mb860vtn6fhpnj.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
