@@ -4,9 +4,8 @@ import 'package:animated_text_kit/animated_text_kit.dart';
 import 'package:flutter/material.dart';
 import 'package:penerangan_kops/constants.dart';
 import 'package:penerangan_kops/home.dart';
+import 'package:penerangan_kops/main_navigation.dart';
 import 'package:shared_preferences/shared_preferences.dart';
-
-import 'login.dart';
 
 class Splash extends StatefulWidget{
   @override
@@ -24,7 +23,7 @@ class SplashScreen extends State<Splash> {
   Widget build(BuildContext context) {
     return Scaffold(
       body: Container(
-        color: AppColor().accentColor,
+        color: AppColor.accentColor,
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
@@ -50,7 +49,7 @@ class SplashScreen extends State<Splash> {
                   textStyle: TextStyle(
                     fontSize: 32.0,
                     fontWeight: FontWeight.bold,
-                    color: AppColor().primaryColor,
+                    color: AppColor.primaryColor,
                   ),
                   textAlign: TextAlign.center,
                   alignment: Alignment.center,
@@ -71,12 +70,16 @@ class SplashScreen extends State<Splash> {
 
   checkData() async {
     SharedPreferences preferences = await SharedPreferences.getInstance();
-    var id = preferences.get("id");
-    var password = preferences.get("password");
-    if (id.toString() != null && password.toString() != null){
+    PreferenceKey key = PreferenceKey();
+    var id = preferences.get(PreferenceKey.id);
+    var password = preferences.get(PreferenceKey.password);
+    var name = preferences.get(PreferenceKey.name);
+    if (id.toString() != null && password.toString() != null && name.toString() != null){
       startLaunching();
     } else {
-    //  masukin ke home langsung
+      Navigator.of(context).pushReplacement(MaterialPageRoute(builder: (_) {
+        return MainNavigation();
+      }));
     }
   }
 

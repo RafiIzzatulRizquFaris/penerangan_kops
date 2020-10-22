@@ -27,11 +27,11 @@ class LoginScreen extends State<Login>{
   Widget build(BuildContext context) {
     return Scaffold(
       body: Container(
-        color: AppColor().accentColor,
+        color: AppColor.accentColor,
         child: isLoading
             ? Center(
           child: CircularProgressIndicator(
-            backgroundColor: AppColor().primaryColor,
+            backgroundColor: AppColor.primaryColor,
           ),
         )
             : ListView(
@@ -63,7 +63,7 @@ class LoginScreen extends State<Login>{
         child: Text(
           "Masuk",
           style: TextStyle(
-              color: AppColor().primaryColor, fontSize: 38, fontWeight: FontWeight.w900),
+              color: AppColor.primaryColor, fontSize: 38, fontWeight: FontWeight.w900),
         ),
       ),
     );
@@ -85,7 +85,7 @@ class LoginScreen extends State<Login>{
                 "Sistem Presensi \nPenerangan Kopassus",
                 style: TextStyle(
                   fontSize: 24,
-                  color: AppColor().primaryColor,
+                  color: AppColor.primaryColor,
                 ),
               ),
             )
@@ -104,25 +104,25 @@ class LoginScreen extends State<Login>{
         child: TextFormField(
           controller: idController,
           style: TextStyle(
-            color: AppColor().primaryColor,
+            color: AppColor.primaryColor,
           ),
           decoration: InputDecoration(
             border: InputBorder.none,
-            fillColor: AppColor().accentColor,
+            fillColor: AppColor.accentColor,
             labelText: "ID",
             labelStyle: TextStyle(
-              color: AppColor().primaryColor,
+              color: AppColor.primaryColor,
             ),
             enabledBorder: OutlineInputBorder(
               borderRadius: BorderRadius.circular(10),
               borderSide: BorderSide(
-                color: AppColor().primaryColor,
+                color: AppColor.primaryColor,
               ),
             ),
             focusedBorder: OutlineInputBorder(
               borderRadius: BorderRadius.circular(10),
               borderSide: BorderSide(
-                color: AppColor().primaryColor,
+                color: AppColor.primaryColor,
               ),
             ),
           ),
@@ -140,25 +140,25 @@ class LoginScreen extends State<Login>{
         child: TextField(
           controller: passwordController,
           style: TextStyle(
-            color: AppColor().primaryColor,
+            color: AppColor.primaryColor,
           ),
           obscureText: true,
           decoration: InputDecoration(
             border: InputBorder.none,
             labelText: 'Password',
             labelStyle: TextStyle(
-              color: AppColor().primaryColor,
+              color: AppColor.primaryColor,
             ),
             enabledBorder: OutlineInputBorder(
               borderRadius: BorderRadius.circular(10),
               borderSide: BorderSide(
-                color: AppColor().primaryColor,
+                color: AppColor.primaryColor,
               ),
             ),
             focusedBorder: OutlineInputBorder(
               borderRadius: BorderRadius.circular(10),
               borderSide: BorderSide(
-                color: AppColor().primaryColor,
+                color: AppColor.primaryColor,
               ),
             ),
           ),
@@ -189,7 +189,7 @@ class LoginScreen extends State<Login>{
               // loginPresenter.loadLoginData(
               //     idController.text.trim(), passwordController.text.trim());
             } else if (idController.text.trim().length == 0) {
-              errorAlert("Empty Email", "Please fill email field");
+              errorAlert("Empty id", "Please fill id field");
             } else if (passwordController.text.trim().length == 0) {
               errorAlert("Empty Password", "Please fill password field");
             } else if (idController.text.trim().length == 0 &&
@@ -204,7 +204,7 @@ class LoginScreen extends State<Login>{
               Text(
                 "Masuk",
                 style: TextStyle(
-                  color: AppColor().accentColor,
+                  color: AppColor.accentColor,
                   fontSize: 16,
                   fontWeight: FontWeight.w700,
                 ),
@@ -214,7 +214,7 @@ class LoginScreen extends State<Login>{
               ),
               Icon(
                 Icons.arrow_forward_ios,
-                color: AppColor().accentColor,
+                color: AppColor.accentColor,
               ),
             ],
           ),
