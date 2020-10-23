@@ -118,6 +118,7 @@ class _HomeState extends State<Home> implements AbsensiContractView {
       floatingActionButton: FloatingActionButton.extended(
         onPressed: () {},
         backgroundColor: AppColor.redColor,
+        icon: Icon(Icons.location_on),
         splashColor: AppColor.accentColor,
         label: Text(
           "Absen Sekarang",
