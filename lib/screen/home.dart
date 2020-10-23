@@ -62,8 +62,7 @@ class _HomeState extends State<Home> {
                 child: Text(
                   "20 Oktober 2020",
                   style: TextStyle(
-                      color: AppColor.redColor,
-                      fontWeight: FontWeight.w400),
+                      color: AppColor.redColor, fontWeight: FontWeight.w400),
                 ),
               ),
               Padding(
@@ -122,8 +121,10 @@ class _HomeState extends State<Home> {
           )),
         ],
       ),
-     
-      floatingActionButton: FloatingActionButton(onPressed: null,backgroundColor: AppColor.redColor,),
+      floatingActionButton: FloatingActionButton(
+        onPressed: null,
+        backgroundColor: AppColor.redColor,
+      ),
       floatingActionButtonLocation: FloatingActionButtonLocation.centerFloat,
     );
   }
