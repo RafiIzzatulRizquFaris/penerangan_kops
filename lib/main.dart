@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:penerangan_kops/splash.dart';
+import 'package:penerangan_kops/screen/splash.dart';
 
 void main() {
   runApp(MyApp());

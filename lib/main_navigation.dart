@@ -24,9 +24,10 @@ class MainNavigationScreen extends State<MainNavigation>{
       body: _mainPage.elementAt(selectedIndex),
       bottomNavigationBar: Theme(
         data: Theme.of(context).copyWith(
-          canvasColor: AppColor.primaryColor,
+          canvasColor: Colors.white,
         ),
         child: BottomNavigationBar(
+          elevation: 0,
           currentIndex: selectedIndex,
           onTap: onTapNavigationItem,
           selectedItemColor: AppColor.primaryColor,
