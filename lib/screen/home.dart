@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:penerangan_kops/constants.dart';
-import 'constants.dart';
+import '../constants.dart';
 
 class Home extends StatefulWidget {
   @override
