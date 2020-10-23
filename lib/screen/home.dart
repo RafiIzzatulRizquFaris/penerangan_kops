@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:penerangan_kops/constants.dart';
 import 'package:penerangan_kops/contract/absensi_contract.dart';
 import 'package:penerangan_kops/presenter/absensi_presenter.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 import '../constants.dart';
 
 class Home extends StatefulWidget {
@@ -14,6 +15,7 @@ class _HomeState extends State<Home> implements AbsensiContractView {
   AbsensiPresenter absensiPresenter;
   List<DocumentSnapshot> listAbsensi = List<DocumentSnapshot>();
   Environment env = Environment();
+  SharedPreferences preferences;
   var isLoadData;
 
   _HomeState() {
@@ -24,6 +26,7 @@ class _HomeState extends State<Home> implements AbsensiContractView {
   void initState() {
     super.initState();
     isLoadData = true;
+    initializePreference();
     absensiPresenter.loadAbsensiData(env.getDateNow());
   }
 
@@ -76,7 +79,7 @@ class _HomeState extends State<Home> implements AbsensiContractView {
                       height: 8,
                     ),
                     Text(
-                      "Kelalawar",
+                      preferences.get(PreferenceKey.name).toString(),
                       style: TextStyle(
                           fontSize: 34.0,
                           color: Colors.white,
@@ -180,5 +183,9 @@ class _HomeState extends State<Home> implements AbsensiContractView {
         ),
       ),
     );
+  }
+
+  initializePreference() async {
+    preferences = await SharedPreferences.getInstance();
   }
 }
