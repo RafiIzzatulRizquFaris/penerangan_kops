@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
-import 'package:penerangan_kops/attendence.dart';
+import 'package:penerangan_kops/screen/attendence.dart';
 import 'package:penerangan_kops/constants.dart';
-import 'package:penerangan_kops/guide.dart';
-import 'package:penerangan_kops/home.dart';
-import 'package:penerangan_kops/profile.dart';
+import 'package:penerangan_kops/screen/guide.dart';
+import 'package:penerangan_kops/screen/home.dart';
+import 'package:penerangan_kops/screen/profile.dart';
 
 class MainNavigation extends StatefulWidget{
   @override

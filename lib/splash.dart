@@ -3,7 +3,7 @@ import 'dart:async';
 import 'package:animated_text_kit/animated_text_kit.dart';
 import 'package:flutter/material.dart';
 import 'package:penerangan_kops/constants.dart';
-import 'package:penerangan_kops/home.dart';
+import 'package:penerangan_kops/screen/home.dart';
 import 'package:penerangan_kops/login.dart';
 import 'package:penerangan_kops/main_navigation.dart';
 import 'package:shared_preferences/shared_preferences.dart';

@@ -29,6 +29,7 @@ dependencies:
   animated_text_kit: ^2.2.0
   rflutter_alert: any
   geolocator: ^6.1.1
+  flutter_calendar_carousel: any
 
 dev_dependencies:
   flutter_test:
