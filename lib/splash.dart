@@ -3,7 +3,6 @@ import 'dart:async';
 import 'package:animated_text_kit/animated_text_kit.dart';
 import 'package:flutter/material.dart';
 import 'package:penerangan_kops/constants.dart';
-import 'package:penerangan_kops/screen/home.dart';
 import 'package:penerangan_kops/login.dart';
 import 'package:penerangan_kops/main_navigation.dart';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -71,11 +70,10 @@ class SplashScreen extends State<Splash> {
 
   checkData() async {
     SharedPreferences preferences = await SharedPreferences.getInstance();
-    PreferenceKey key = PreferenceKey();
     var id = preferences.get(PreferenceKey.id);
     var password = preferences.get(PreferenceKey.password);
     var name = preferences.get(PreferenceKey.name);
-    if (id.toString() != null && password.toString() != null && name.toString() != null){
+    if (id.toString() == null && password.toString() == null && name.toString() == null){
       startLaunching();
     } else {
       Navigator.of(context).pushReplacement(MaterialPageRoute(builder: (_) {
