@@ -273,6 +273,7 @@ class LoginScreen extends State<Login> implements LoginContractView{
       if (status == LoginResponse.SUCCESS){
         setState(() {
           isLoading = false;
+          isError = false;
         });
         if (!isLoading && !isError) {
           Navigator.pushReplacement(context,
