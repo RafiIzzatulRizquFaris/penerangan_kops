@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:snapping_sheet/snapping_sheet.dart';
 
 class Guide extends StatefulWidget {
   @override
@@ -8,8 +9,18 @@ class Guide extends StatefulWidget {
 class _GuideState extends State<Guide> {
   @override
   Widget build(BuildContext context) {
-    return Container(
-      child: Text("Panduan"),
+    return Scaffold(
+      body: SnappingSheet(
+        sheetBelow: SnappingSheetContent(
+            child: Container(
+              color: Colors.red,
+            ),
+            heightBehavior: SnappingSheetHeight.fit()),
+        grabbing: Container(
+          color: Colors.blue,
+        ),
+        child: Text("jhjhuhjj"),
+      ),
       
     );
   }
