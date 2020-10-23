@@ -18,3 +18,14 @@ class LoginResponse{
   static const String FAILED = "failed";
   static const String SUCCESS = "success";
 }
+
+class Environment {
+  String getDateNow(){
+    var date = DateTime.now();
+    return "${date.year}-${date.month}-${date.day}";
+  }
+  String getTimeNow(){
+    var date = DateTime.now();
+    return "${date.hour}:${date.minute}";
+  }
+}
