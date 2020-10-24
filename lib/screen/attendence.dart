@@ -25,7 +25,7 @@ class _AttandenceState extends State<Attandence> {
       body: SnappingSheet(
         snapPositions: [
           SnapPosition(
-              positionPixel: 190.0,
+              positionPixel: 150.0,
               snappingCurve: Curves.elasticOut,
               snappingDuration: Duration(milliseconds: 750)
               ),
