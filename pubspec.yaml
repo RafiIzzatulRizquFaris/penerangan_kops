@@ -32,6 +32,7 @@ dependencies:
   table_calendar: ^2.3.0
   snapping_sheet: ^2.0.1
   progress_dialog: any
+  intl: any
 
 dev_dependencies:
   flutter_test:

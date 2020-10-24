@@ -1,6 +1,7 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:geolocator/geolocator.dart';
+import 'package:intl/intl.dart';
 import 'package:penerangan_kops/constants.dart';
 import 'package:penerangan_kops/contract/absensi_contract.dart';
 import 'package:penerangan_kops/presenter/absensi_presenter.dart';
@@ -115,7 +116,7 @@ class _HomeState extends State<Home> implements AbsensiContractView {
             child: Padding(
               padding: EdgeInsets.fromLTRB(0, 16, 0, 0),
               child: Text(
-                "20 Oktober 2020",
+                todayDate(),
                 style: TextStyle(
                     color: AppColor.redColor, fontWeight: FontWeight.w400),
               ),
@@ -282,5 +283,11 @@ class _HomeState extends State<Home> implements AbsensiContractView {
         alertAlignment: Alignment.center,
       ),
     ).show();
+  }
+
+  String todayDate(){
+    DateTime today = DateTime.now();
+    DateFormat format = DateFormat('dd MMMM yyyy');
+    return format.format(today);
   }
 }
