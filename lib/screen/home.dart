@@ -47,7 +47,11 @@ class _HomeState extends State<Home> implements AbsensiContractView {
     loadingDialog.style(
       message: "Memasukkan data absensi",
       progressWidget: Container(
-          padding: EdgeInsets.all(8.0), child: CircularProgressIndicator(backgroundColor: AppColor.accentColor,),),
+        padding: EdgeInsets.all(8.0),
+        child: CircularProgressIndicator(
+          backgroundColor: AppColor.accentColor,
+        ),
+      ),
       backgroundColor: Colors.white,
       elevation: 10.0,
       insetAnimCurve: Curves.easeInOut,
@@ -129,10 +133,20 @@ class _HomeState extends State<Home> implements AbsensiContractView {
                       backgroundColor: AppColor.accentColor,
                     ),
                   )
-                : ListView.builder(
-                    itemCount: listAbsensi.length,
-                    itemBuilder: builderAbsensi,
-                  ),
+                : listAbsensi.isEmpty
+                    ? Center(
+                        child: Text(
+                          "Data Absensi Kosong",
+                          style: TextStyle(
+                            color: AppColor.accentColor,
+                            fontSize: 18,
+                          ),
+                        ),
+                      )
+                    : ListView.builder(
+                        itemCount: listAbsensi.length,
+                        itemBuilder: builderAbsensi,
+                      ),
           ),
         ],
       ),
@@ -149,7 +163,8 @@ class _HomeState extends State<Home> implements AbsensiContractView {
                 distance.toInt().toString(), env.getDateNow());
           } else {
             await loadingDialog.hide();
-            errorAlert("Gagal Absen", "Jarak anda terlalu jauh, silahkan lebih dekat dengan lokasi yang ditentukan");
+            errorAlert("Gagal Absen",
+                "Jarak anda terlalu jauh, silahkan lebih dekat dengan lokasi yang ditentukan");
           }
         },
         backgroundColor: AppColor.redColor,
@@ -184,10 +199,11 @@ class _HomeState extends State<Home> implements AbsensiContractView {
         absensiPresenter.loadAbsensiData(env.getDateNow());
         print("Success");
         await loadingDialog.hide();
-      } else if (status == AbsenResponse.ALREADY){
+      } else if (status == AbsenResponse.ALREADY) {
         print("already");
         await loadingDialog.hide();
-        errorAlert("Sudah Absen", "Terimakasih, anda sudah absen. Tidak perlu absen lagi");
+        errorAlert("Sudah Absen",
+            "Terimakasih, anda sudah absen. Tidak perlu absen lagi");
       } else {
         print("failed");
         await loadingDialog.hide();
@@ -285,7 +301,7 @@ class _HomeState extends State<Home> implements AbsensiContractView {
     ).show();
   }
 
-  String todayDate(){
+  String todayDate() {
     DateTime today = DateTime.now();
     DateFormat format = DateFormat('dd MMMM yyyy');
     return format.format(today);
