@@ -70,7 +70,6 @@ class SplashScreen extends State<Splash> {
 
   checkData() async {
     SharedPreferences preferences = await SharedPreferences.getInstance();
-    PreferenceKey key = PreferenceKey();
     var id = preferences.get(PreferenceKey.id);
     var password = preferences.get(PreferenceKey.password);
     var name = preferences.get(PreferenceKey.name);
@@ -78,7 +77,7 @@ class SplashScreen extends State<Splash> {
       startLaunching();
     } else {
       Navigator.of(context).pushReplacement(MaterialPageRoute(builder: (_) {
-        return MainNavigation();
+        return Login();
       }));
     }
   }
