@@ -19,6 +19,12 @@ class LoginResponse{
   static const String SUCCESS = "success";
 }
 
+class AbsenResponse{
+  static const String SUCCESS = "success";
+  static const String FAILED = "failed";
+  static const String ALREADY = "already";
+}
+
 class Environment {
   String getDateNow(){
     var date = DateTime.now();
@@ -28,4 +34,10 @@ class Environment {
     var date = DateTime.now();
     return "${date.hour}:${date.minute}";
   }
+}
+
+class Location{
+  static const double LAT = -6.318920;
+  static const double LONG = 106.852008;
+  static const double MAX_DISTANCE = 1000.00;
 }
