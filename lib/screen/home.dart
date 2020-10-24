@@ -167,9 +167,10 @@ class _HomeState extends State<Home> implements AbsensiContractView {
   }
 
   @override
-  onErrorAbsen(error) {
-    // TODO: implement onErrorAbsen
-    throw UnimplementedError();
+  onErrorAbsen(error) async {
+    print(error.toString());
+    await loadingDialog.hide();
+    errorAlert("Gagal Absen", "Sesuatu bermasalah,silahkan hubungi pengembang");
   }
 
   @override
@@ -209,8 +210,6 @@ class _HomeState extends State<Home> implements AbsensiContractView {
   @override
   setOnErrorAbsensi(error) async {
     print(error.toString());
-    await loadingDialog.hide();
-    errorAlert("Gagal Absen", "Sesuatu bermasalah,silahkan hubungi pengembang");
   }
 
   Widget builderAbsensi(BuildContext context, int index) {
@@ -234,7 +233,7 @@ class _HomeState extends State<Home> implements AbsensiContractView {
           style: TextStyle(fontSize: 20.0, color: AppColor.blackColor),
         ),
         subtitle: Text(
-          "${listAbsensi[index].data["range"]} M",
+          "${listAbsensi[index].data["range"]} Meter",
           style: TextStyle(color: AppColor.blackColor),
         ),
       ),
