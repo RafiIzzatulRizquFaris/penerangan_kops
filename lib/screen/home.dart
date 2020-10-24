@@ -1,6 +1,7 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:geolocator/geolocator.dart';
+import 'package:intl/date_symbol_data_local.dart';
 import 'package:intl/intl.dart';
 import 'package:penerangan_kops/constants.dart';
 import 'package:penerangan_kops/contract/absensi_contract.dart';
@@ -32,6 +33,7 @@ class _HomeState extends State<Home> implements AbsensiContractView {
   @override
   void initState() {
     super.initState();
+    initializeDateFormatting();
     isLoadData = true;
     initializePreference();
     absensiPresenter.loadAbsensiData(env.getDateNow());
@@ -303,7 +305,8 @@ class _HomeState extends State<Home> implements AbsensiContractView {
 
   String todayDate() {
     DateTime today = DateTime.now();
-    DateFormat format = DateFormat('dd MMMM yyyy');
+    String languageCode = Localizations.localeOf(context).languageCode;
+    DateFormat format = DateFormat('dd MMMM yyyy', languageCode);
     return format.format(today);
   }
 }
