@@ -70,13 +70,13 @@ class SplashScreen extends State<Splash> {
 
   checkData() async {
     SharedPreferences preferences = await SharedPreferences.getInstance();
-    PreferenceKey key = PreferenceKey();
     var id = preferences.get(PreferenceKey.id);
     var password = preferences.get(PreferenceKey.password);
     var name = preferences.get(PreferenceKey.name);
-    if (id.toString() != null && password.toString() != null && name.toString() != null){
+    if (id == null && password == null && name == null){
       startLaunching();
     } else {
+      print("not null");
       Navigator.of(context).pushReplacement(MaterialPageRoute(builder: (_) {
         return MainNavigation();
       }));
@@ -87,7 +87,7 @@ class SplashScreen extends State<Splash> {
     var duration = Duration(seconds: 5);
     return Timer(duration, () {
       Navigator.of(context).pushReplacement(MaterialPageRoute(builder: (_) {
-        return MainNavigation();
+        return Login();
       }));
     });
   }

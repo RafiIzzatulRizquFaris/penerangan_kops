@@ -1,8 +1,11 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
+import 'package:geolocator/geolocator.dart';
 import 'package:penerangan_kops/constants.dart';
 import 'package:penerangan_kops/contract/absensi_contract.dart';
 import 'package:penerangan_kops/presenter/absensi_presenter.dart';
+import 'package:progress_dialog/progress_dialog.dart';
+import 'package:rflutter_alert/rflutter_alert.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import '../constants.dart';
 
@@ -16,7 +19,10 @@ class _HomeState extends State<Home> implements AbsensiContractView {
   List<DocumentSnapshot> listAbsensi = List<DocumentSnapshot>();
   Environment env = Environment();
   SharedPreferences preferences;
+  ProgressDialog loadingDialog;
   var isLoadData;
+  String name = "Unknown";
+  String id;
 
   _HomeState() {
     absensiPresenter = AbsensiPresenter(this);
@@ -32,6 +38,21 @@ class _HomeState extends State<Home> implements AbsensiContractView {
 
   @override
   Widget build(BuildContext context) {
+    loadingDialog = ProgressDialog(
+      context,
+      type: ProgressDialogType.Normal,
+      isDismissible: false,
+    );
+    loadingDialog.style(
+      message: "Memasukkan data absensi",
+      progressWidget: Container(
+          padding: EdgeInsets.all(8.0), child: CircularProgressIndicator(backgroundColor: AppColor.accentColor,),),
+      backgroundColor: Colors.white,
+      elevation: 10.0,
+      insetAnimCurve: Curves.easeInOut,
+      messageTextStyle: TextStyle(color: AppColor.accentColor),
+    );
+
     return Scaffold(
       body: Column(
         children: [
@@ -79,7 +100,7 @@ class _HomeState extends State<Home> implements AbsensiContractView {
                       height: 8,
                     ),
                     Text(
-                      preferences.get(PreferenceKey.name).toString(),
+                      name,
                       style: TextStyle(
                           fontSize: 34.0,
                           color: Colors.white,
@@ -116,7 +137,20 @@ class _HomeState extends State<Home> implements AbsensiContractView {
       ),
       floatingActionButtonLocation: FloatingActionButtonLocation.centerFloat,
       floatingActionButton: FloatingActionButton.extended(
-        onPressed: () {},
+        onPressed: () async {
+          await loadingDialog.show();
+          Position position = await Geolocator.getCurrentPosition(
+              desiredAccuracy: LocationAccuracy.high);
+          var distance = Geolocator.distanceBetween(position.latitude,
+              position.longitude, Location.LAT, Location.LONG);
+          if (distance <= Location.MAX_DISTANCE) {
+            absensiPresenter.loadAbsen(id, name, env.getTimeNow(),
+                distance.toInt().toString(), env.getDateNow());
+          } else {
+            await loadingDialog.hide();
+            errorAlert("Gagal Absen", "Jarak anda terlalu jauh, silahkan lebih dekat dengan lokasi yang ditentukan");
+          }
+        },
         backgroundColor: AppColor.redColor,
         icon: Icon(Icons.location_on),
         splashColor: AppColor.accentColor,
@@ -139,9 +173,29 @@ class _HomeState extends State<Home> implements AbsensiContractView {
   }
 
   @override
-  onSuccessAbsen(String status) {
-    // TODO: implement onSuccessAbsen
-    throw UnimplementedError();
+  onSuccessAbsen(String status) async {
+    if (status != null) {
+      if (status == AbsenResponse.SUCCESS) {
+        setState(() {
+          isLoadData = true;
+        });
+        absensiPresenter.loadAbsensiData(env.getDateNow());
+        print("Success");
+        await loadingDialog.hide();
+      } else if (status == AbsenResponse.ALREADY){
+        print("already");
+        await loadingDialog.hide();
+        errorAlert("Sudah Absen", "Terimakasih, anda sudah absen. Tidak perlu absen lagi");
+      } else {
+        print("failed");
+        await loadingDialog.hide();
+        errorAlert("Gagal Absen", "Silahkan cek koneksi dan nyalakan GPS");
+      }
+    } else {
+      print("failed");
+      await loadingDialog.hide();
+      errorAlert("Gagal Absen", "Silahkan cek koneksi dan nyalakan GPS");
+    }
   }
 
   @override
@@ -153,9 +207,10 @@ class _HomeState extends State<Home> implements AbsensiContractView {
   }
 
   @override
-  setOnErrorAbsensi(error) {
-    // TODO: implement setOnErrorAbsensi
-    throw UnimplementedError();
+  setOnErrorAbsensi(error) async {
+    print(error.toString());
+    await loadingDialog.hide();
+    errorAlert("Gagal Absen", "Sesuatu bermasalah,silahkan hubungi pengembang");
   }
 
   Widget builderAbsensi(BuildContext context, int index) {
@@ -188,5 +243,45 @@ class _HomeState extends State<Home> implements AbsensiContractView {
 
   initializePreference() async {
     preferences = await SharedPreferences.getInstance();
+    setState(() {
+      name = preferences.get(PreferenceKey.name).toString();
+      id = preferences.get(PreferenceKey.id).toString();
+    });
+  }
+
+  errorAlert(String title, String subtitle) {
+    return Alert(
+      context: context,
+      title: title,
+      desc: subtitle,
+      type: AlertType.warning,
+      buttons: [
+        DialogButton(
+          onPressed: () => Navigator.pop(context),
+          child: Text(
+            "OK",
+            style: TextStyle(color: AppColor.primaryColor, fontSize: 20),
+          ),
+        ),
+      ],
+      style: AlertStyle(
+        animationType: AnimationType.grow,
+        isCloseButton: false,
+        isOverlayTapDismiss: false,
+        descStyle: TextStyle(fontWeight: FontWeight.bold),
+        descTextAlign: TextAlign.start,
+        animationDuration: Duration(milliseconds: 400),
+        alertBorder: RoundedRectangleBorder(
+          borderRadius: BorderRadius.circular(10),
+          side: BorderSide(
+            color: Colors.grey,
+          ),
+        ),
+        titleStyle: TextStyle(
+          color: AppColor.redColor,
+        ),
+        alertAlignment: Alignment.center,
+      ),
+    ).show();
   }
 }
