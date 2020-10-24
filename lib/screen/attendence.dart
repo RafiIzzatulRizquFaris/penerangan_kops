@@ -23,6 +23,18 @@ class _AttandenceState extends State<Attandence> {
   Widget build(BuildContext context) {
     return Scaffold(
       body: SnappingSheet(
+        grabbingHeight: 40.0,
+        snapPositions: [
+          SnapPosition(
+              positionPixel: MediaQuery.of(context).size.height * 25/100,
+              snappingCurve: Curves.elasticOut,
+              snappingDuration: Duration(milliseconds: 750)
+              ),
+          SnapPosition(
+              positionFactor: 0.75,
+              snappingCurve: Curves.ease,
+              snappingDuration: Duration(milliseconds: 500)),
+        ],
         sheetBelow: SnappingSheetContent(
             child: Container(
               color: Colors.white,
@@ -68,16 +80,13 @@ class _AttandenceState extends State<Attandence> {
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  SizedBox(
-                    height: 25,
-                  ),
-                  Text(
+                  SafeArea(child: Text(
                     "Kalender",
                     style: TextStyle(
                         color: AppColor.primaryColor,
                         fontSize: 30,
                         fontWeight: FontWeight.bold),
-                  ),
+                  ),),
                   SizedBox(
                     height: 15,
                   ),

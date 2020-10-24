@@ -9,19 +9,6 @@ class Guide extends StatefulWidget {
 class _GuideState extends State<Guide> {
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      body: SnappingSheet(
-        sheetBelow: SnappingSheetContent(
-            child: Container(
-              color: Colors.red,
-            ),
-            heightBehavior: SnappingSheetHeight.fit()),
-        grabbing: Container(
-          color: Colors.blue,
-        ),
-        child: Text("jhjhuhjj"),
-      ),
-      
-    );
+    return Scaffold(body: Column());
   }
 }
