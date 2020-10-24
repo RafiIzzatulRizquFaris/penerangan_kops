@@ -25,6 +25,7 @@ class _HomeState extends State<Home> implements AbsensiContractView {
   var isLoadData;
   String name = "Unknown";
   String id;
+  double distanceDouble;
 
   _HomeState() {
     absensiPresenter = AbsensiPresenter(this);
@@ -80,13 +81,18 @@ class _HomeState extends State<Home> implements AbsensiContractView {
                     Row(
                       mainAxisAlignment: MainAxisAlignment.end,
                       children: [
+                        Padding(
+                          padding: EdgeInsets.only(right: 10,),
+                          child: Text("Jarak Absensi : ${distanceDouble.toInt().toString()} Meter", style: TextStyle(color: AppColor.primaryColor,),),
+                        ),
                         IconButton(
                           icon: Icon(
                             Icons.refresh,
                             size: 24.0,
                             color: Colors.white,
                           ),
-                          onPressed: () {
+                          onPressed: () async {
+                            await distanceMeter();
                             setState(() {
                               isLoadData = true;
                             });
@@ -156,13 +162,10 @@ class _HomeState extends State<Home> implements AbsensiContractView {
       floatingActionButton: FloatingActionButton.extended(
         onPressed: () async {
           await loadingDialog.show();
-          Position position = await Geolocator.getCurrentPosition(
-              desiredAccuracy: LocationAccuracy.high);
-          var distance = Geolocator.distanceBetween(position.latitude,
-              position.longitude, Location.LAT, Location.LONG);
-          if (distance <= Location.MAX_DISTANCE) {
+          await distanceMeter();
+          if (distanceDouble <= Location.MAX_DISTANCE) {
             absensiPresenter.loadAbsen(id, name, env.getTimeNow(),
-                distance.toInt().toString(), env.getDateNow());
+                distanceDouble.toInt().toString(), env.getDateNow());
           } else {
             await loadingDialog.hide();
             errorAlert("Gagal Absen",
@@ -308,5 +311,15 @@ class _HomeState extends State<Home> implements AbsensiContractView {
     String languageCode = Localizations.localeOf(context).languageCode;
     DateFormat format = DateFormat('dd MMMM yyyy', languageCode);
     return format.format(today);
+  }
+
+  distanceMeter() async {
+    Position position = await Geolocator.getCurrentPosition(
+        desiredAccuracy: LocationAccuracy.high);
+    var distance = Geolocator.distanceBetween(position.latitude,
+        position.longitude, Location.LAT, Location.LONG);
+    setState(() {
+      distanceDouble = distance;
+    });
   }
 }
