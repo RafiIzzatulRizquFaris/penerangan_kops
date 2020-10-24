@@ -20,7 +20,7 @@ class GrabSection extends StatelessWidget {
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: <Widget>[
           Container(
-            width: 100.0,
+            width: 50.0,
             height: 8.5,
             margin: EdgeInsets.only(top: 15.0),
             decoration: BoxDecoration(

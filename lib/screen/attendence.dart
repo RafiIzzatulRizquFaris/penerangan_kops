@@ -23,9 +23,10 @@ class _AttandenceState extends State<Attandence> {
   Widget build(BuildContext context) {
     return Scaffold(
       body: SnappingSheet(
+        grabbingHeight: 40.0,
         snapPositions: [
           SnapPosition(
-              positionPixel: 150.0,
+              positionPixel: MediaQuery.of(context).size.height * 25/100,
               snappingCurve: Curves.elasticOut,
               snappingDuration: Duration(milliseconds: 750)
               ),
