@@ -46,10 +46,11 @@ class _HomeState extends State<Home> implements AbsensiContractView {
     loadingDialog.style(
       message: "Memasukkan data absensi",
       progressWidget: Container(
-          padding: EdgeInsets.all(8.0), child: CircularProgressIndicator()),
+          padding: EdgeInsets.all(8.0), child: CircularProgressIndicator(backgroundColor: AppColor.accentColor,),),
       backgroundColor: Colors.white,
       elevation: 10.0,
       insetAnimCurve: Curves.easeInOut,
+      messageTextStyle: TextStyle(color: AppColor.accentColor),
     );
 
     return Scaffold(
@@ -146,6 +147,7 @@ class _HomeState extends State<Home> implements AbsensiContractView {
             absensiPresenter.loadAbsen(id, name, env.getTimeNow(),
                 distance.toInt().toString(), env.getDateNow());
           } else {
+            await loadingDialog.hide();
             errorAlert("Gagal Absen", "Jarak anda terlalu jauh, silahkan lebih dekat dengan lokasi yang ditentukan");
           }
         },
