@@ -1,4 +1,7 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
+import 'package:penerangan_kops/contract/absensi_contract.dart';
+import 'package:penerangan_kops/presenter/absensi_presenter.dart';
 import 'package:penerangan_kops/screen/component/grabing.dart';
 import 'package:snapping_sheet/snapping_sheet.dart';
 import 'package:table_calendar/table_calendar.dart';
@@ -9,14 +12,24 @@ class Attandence extends StatefulWidget {
   _AttandenceState createState() => _AttandenceState();
 }
 
-class _AttandenceState extends State<Attandence> {
+class _AttandenceState extends State<Attandence>
+    implements AbsensiContractView {
   CalendarController _calendarController;
+  AbsensiPresenter _absensiPresenter;
+  List<DocumentSnapshot> listAbsensi = List<DocumentSnapshot>();
+  Environment env = Environment();
+  var isLoadData;
+
+  _AttandenceState() {
+    _absensiPresenter = AbsensiPresenter(this);
+  }
 
   @override
   void initState() {
-    // TODO: implement initState
     super.initState();
     _calendarController = CalendarController();
+    isLoadData = true;
+    _absensiPresenter.loadAbsensiData(env.getDateNow());
   }
 
   @override
@@ -26,10 +39,9 @@ class _AttandenceState extends State<Attandence> {
         grabbingHeight: 40.0,
         snapPositions: [
           SnapPosition(
-              positionPixel: MediaQuery.of(context).size.height * 25/100,
+              positionPixel: MediaQuery.of(context).size.height * 25 / 100,
               snappingCurve: Curves.elasticOut,
-              snappingDuration: Duration(milliseconds: 750)
-              ),
+              snappingDuration: Duration(milliseconds: 750)),
           SnapPosition(
               positionFactor: 0.75,
               snappingCurve: Curves.ease,
@@ -38,35 +50,25 @@ class _AttandenceState extends State<Attandence> {
         sheetBelow: SnappingSheetContent(
             child: Container(
               color: Colors.white,
-              child: Column(
-                children: [
-                  Padding(
-                    padding: EdgeInsets.all(8),
-                    child: ListTile(
-                      leading: Icon(
-                        Icons.person,
-                        color: AppColor.blackColor,
-                        size: 40,
-                      ),
-                      title: Text(
-                        "Kelelawar",
-                        style: TextStyle(
-                            color: AppColor.blackColor,
-                            fontWeight: FontWeight.w600,
-                            fontSize: 18.0),
-                      ),
-                      trailing: Text(
-                        "09:10",
-                        style: TextStyle(
-                            fontSize: 20.0, color: AppColor.blackColor),
-                      ),
-                      subtitle: Text(
-                        "990 M",
-                        style: TextStyle(color: AppColor.blackColor),
-                      ),
-                    ),
+              child: isLoadData
+                  ? Center(
+                child: CircularProgressIndicator(
+                  backgroundColor: AppColor.accentColor,
+                ),
+              )
+                  : listAbsensi.isEmpty
+                  ? Center(
+                child: Text(
+                  "Data Absensi Kosong",
+                  style: TextStyle(
+                    color: AppColor.accentColor,
+                    fontSize: 18,
                   ),
-                ],
+                ),
+              )
+                  : ListView.builder(
+                itemCount: listAbsensi.length,
+                itemBuilder: itemBuilderAbsensi,
               ),
             ),
             heightBehavior: SnappingSheetHeight.fit()),
@@ -80,18 +82,21 @@ class _AttandenceState extends State<Attandence> {
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  SafeArea(child: Text(
-                    "Kalender",
-                    style: TextStyle(
-                        color: AppColor.primaryColor,
-                        fontSize: 30,
-                        fontWeight: FontWeight.bold),
-                  ),),
+                  SafeArea(
+                    child: Text(
+                      "Kalender",
+                      style: TextStyle(
+                          color: AppColor.primaryColor,
+                          fontSize: 30,
+                          fontWeight: FontWeight.bold),
+                    ),
+                  ),
                   SizedBox(
                     height: 15,
                   ),
                   TableCalendar(
                     calendarController: _calendarController,
+                    onDaySelected: onDaySelected,
                     startingDayOfWeek: StartingDayOfWeek.monday,
                     calendarStyle: CalendarStyle(
                       selectedColor: AppColor.redColor,
@@ -117,6 +122,68 @@ class _AttandenceState extends State<Attandence> {
                 ],
               ),
             )),
+      ),
+    );
+  }
+
+  void onDaySelected(
+      DateTime day, List<dynamic> events, List<dynamic> holidays) {
+    setState(() {
+      isLoadData = true;
+    });
+    String selectedDay = "${day.year}-${day.month}-${day.day}";
+    _absensiPresenter.loadAbsensiData(selectedDay);
+  }
+
+  @override
+  onErrorAbsen(error) {
+    // TODO: implement onErrorAbsen
+    throw UnimplementedError();
+  }
+
+  @override
+  onSuccessAbsen(String status) {
+    // TODO: implement onSuccessAbsen
+    throw UnimplementedError();
+  }
+
+  @override
+  setAbsensiData(List<DocumentSnapshot> value) {
+    setState(() {
+      listAbsensi = value;
+      isLoadData = false;
+    });
+  }
+
+  @override
+  setOnErrorAbsensi(error) {
+    print(error.toString());
+  }
+
+  Widget itemBuilderAbsensi(BuildContext context, int index) {
+    return Padding(
+      padding: EdgeInsets.all(8),
+      child: ListTile(
+        leading: Icon(
+          Icons.person,
+          color: AppColor.blackColor,
+          size: 40,
+        ),
+        title: Text(
+          listAbsensi[index].data["name"],
+          style: TextStyle(
+              color: AppColor.blackColor,
+              fontWeight: FontWeight.w600,
+              fontSize: 18.0),
+        ),
+        trailing: Text(
+          listAbsensi[index].data["time"],
+          style: TextStyle(fontSize: 20.0, color: AppColor.blackColor),
+        ),
+        subtitle: Text(
+          "${listAbsensi[index].data["range"]} Meter",
+          style: TextStyle(color: AppColor.blackColor),
+        ),
       ),
     );
   }
