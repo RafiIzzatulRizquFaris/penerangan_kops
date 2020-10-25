@@ -12,13 +12,47 @@ class _GuideState extends State<Guide> {
   List<Step> _stepAccount() {
     List<Step> _steps = [
       Step(
-          title: Text("Buka Firestore"),
+          title: Text("Buka Firebase Console di Google"),
           content: Text(
-            "test",
+            "Search firebase console di google atau buka link console.firebase.google.com",
             style: TextStyle(color: AppColor.blackColor),
           )),
-      Step(title: Text("Login "), content: Text("test")),
-      Step(title: Text("s"), content: Text("test")),
+      Step(
+          title: Text("Login menggunakan akun yang sudah ada"),
+          content: Text(
+            "Kami sudah menyiapkan sebuah akun google firebase dan dapat dipakai untuk login",
+            style: TextStyle(color: AppColor.blackColor),
+          )),
+      Step(
+          title: Text("Buka project penerangan-kops"),
+          content: Text(
+              "Pada table project silahkan memilih project penerangan-korps",
+              style: TextStyle(color: AppColor.blackColor))),
+      Step(
+          title: Text("Buka Cloud Firestore"),
+          content: Text(
+            "Pada tampilan menu terdapat beberapa menu, pilihlah Cloud Firestore",
+            style: TextStyle(color: AppColor.blackColor),
+          )),
+      Step(
+          title: Text("Pilih user collection"),
+          content: Text(
+            "Pada tampilan table di Cloud Firestore, pilihlah koleksi user / user collection",
+            style: TextStyle(color: AppColor.blackColor),
+          )),
+      Step(
+          title: Text("Menambahkan Akun"),
+          content: Text(
+            "Setelah memilih koleksi user, tekan tombol Tambahkan Dokumen lalu isi: \nID Dokumen dengan ID Otomatis \nlalu kolom 1 yaitu id(string) dan isikan nilainya dengan id dipunya \nkolom ke 2 yaitu name(string) dan isikan nilainya dengan nama masing - masing \nkolom ke 3 yaitu password(string) dan isikan nilainya dengan password yang diinginkan",
+            textAlign: TextAlign.start,
+            style: TextStyle(color: AppColor.blackColor),
+          )),
+      Step(
+          title: Text("(Tambahan)"),
+          content: Text(
+            "Kita juga membuat video youtube untuk mempermudah berikut adalah liknya",
+            style: TextStyle(color: AppColor.blackColor),
+          )),
     ];
     return _steps;
   }
@@ -40,7 +74,7 @@ class _GuideState extends State<Guide> {
                 child: Padding(
               padding: EdgeInsets.all(10),
               child: Text(
-                "Panduan",
+                "Panduan Registrasi",
                 style: TextStyle(
                     color: AppColor.primaryColor,
                     fontSize: 30.0,
@@ -67,7 +101,7 @@ class _GuideState extends State<Guide> {
             );
           },
           onStepContinue: () {
-            if (_currentSteps != 1) {
+            if (_currentSteps <= 0) {
               setState(() {
                 _currentSteps += 1;
               });
