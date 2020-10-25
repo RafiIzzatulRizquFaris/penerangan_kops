@@ -33,6 +33,7 @@ dependencies:
   snapping_sheet: ^2.0.1
   progress_dialog: any
   intl: any
+  app_settings: any
 
 dev_dependencies:
   flutter_test:

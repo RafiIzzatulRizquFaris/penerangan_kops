@@ -1,3 +1,4 @@
+import 'package:app_settings/app_settings.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:geolocator/geolocator.dart';
@@ -83,8 +84,15 @@ class _HomeState extends State<Home> implements AbsensiContractView {
                       mainAxisAlignment: MainAxisAlignment.end,
                       children: [
                         Padding(
-                          padding: EdgeInsets.only(right: 10,),
-                          child: Text("Jarak Absensi : ${distanceDouble.toStringAsFixed(2).toString()} Meter", style: TextStyle(color: AppColor.primaryColor,),),
+                          padding: EdgeInsets.only(
+                            right: 10,
+                          ),
+                          child: Text(
+                            "Jarak Absensi : ${distanceDouble.toStringAsFixed(2).toString()} Meter",
+                            style: TextStyle(
+                              color: AppColor.primaryColor,
+                            ),
+                          ),
                         ),
                         IconButton(
                           icon: Icon(
@@ -93,15 +101,27 @@ class _HomeState extends State<Home> implements AbsensiContractView {
                             color: Colors.white,
                           ),
                           onPressed: () async {
-                            Position position = await Geolocator.getCurrentPosition(
-                                desiredAccuracy: LocationAccuracy.high);
-                            var distance = Geolocator.distanceBetween(position.latitude,
-                                position.longitude, Location.LAT, Location.LONG);
-                            setState(() {
-                              isLoadData = true;
-                              distanceDouble = distance;
-                            });
-                            absensiPresenter.loadAbsensiData(env.getDateNow());
+                            if (!(await Geolocator
+                                .isLocationServiceEnabled())) {
+                              alertLocation("Lokasi Anda Tidak Aktif",
+                                  "Silahkan aktifkan GPS anda", context);
+                            } else {
+                              Position position =
+                                  await Geolocator.getCurrentPosition(
+                                      desiredAccuracy: LocationAccuracy.high);
+                              var distance = Geolocator.distanceBetween(
+                                position.latitude,
+                                position.longitude,
+                                Location.LAT,
+                                Location.LONG,
+                              );
+                              setState(() {
+                                isLoadData = true;
+                                distanceDouble = distance;
+                              });
+                              absensiPresenter
+                                  .loadAbsensiData(env.getDateNow());
+                            }
                           },
                           splashColor: Colors.lightGreenAccent,
                         ),
@@ -166,19 +186,23 @@ class _HomeState extends State<Home> implements AbsensiContractView {
       floatingActionButtonLocation: FloatingActionButtonLocation.centerFloat,
       floatingActionButton: FloatingActionButton.extended(
         onPressed: () async {
-          print(env.getTimeNow());
-          await loadingDialog.show();
-          Position position = await Geolocator.getCurrentPosition(
-              desiredAccuracy: LocationAccuracy.high);
-          var distance = Geolocator.distanceBetween(position.latitude,
-              position.longitude, Location.LAT, Location.LONG);
-          if (distance <= Location.MAX_DISTANCE) {
-            absensiPresenter.loadAbsen(id, name, env.getTimeNow(),
-                distance.toStringAsFixed(2), env.getDateNow());
+          if (!(await Geolocator.isLocationServiceEnabled())) {
+            alertLocation("Lokasi Anda Tidak Aktif",
+                "Silahkan aktifkan GPS anda", context);
           } else {
-            await loadingDialog.hide();
-            errorAlert("Gagal Absen",
-                "Jarak anda terlalu jauh, silahkan lebih dekat dengan lokasi yang ditentukan");
+            await loadingDialog.show();
+            Position position = await Geolocator.getCurrentPosition(
+                desiredAccuracy: LocationAccuracy.high);
+            var distance = Geolocator.distanceBetween(position.latitude,
+                position.longitude, Location.LAT, Location.LONG);
+            if (distance <= Location.MAX_DISTANCE) {
+              absensiPresenter.loadAbsen(id, name, env.getTimeNow(),
+                  distance.toStringAsFixed(2), env.getDateNow());
+            } else {
+              await loadingDialog.hide();
+              errorAlert("Gagal Absen",
+                  "Jarak anda terlalu jauh, silahkan lebih dekat dengan lokasi yang ditentukan");
+            }
           }
         },
         backgroundColor: AppColor.redColor,
@@ -325,10 +349,49 @@ class _HomeState extends State<Home> implements AbsensiContractView {
   distanceMeter() async {
     Position position = await Geolocator.getCurrentPosition(
         desiredAccuracy: LocationAccuracy.high);
-    var distance = Geolocator.distanceBetween(position.latitude,
-        position.longitude, Location.LAT, Location.LONG);
+    var distance = Geolocator.distanceBetween(
+        position.latitude, position.longitude, Location.LAT, Location.LONG);
     setState(() {
       distanceDouble = distance;
     });
+  }
+
+  alertLocation(String title, String subtitle, BuildContext context) {
+    return Alert(
+      context: context,
+      title: title,
+      desc: subtitle,
+      type: AlertType.warning,
+      buttons: [
+        DialogButton(
+          onPressed: () {
+            AppSettings.openLocationSettings();
+            Navigator.pop(context);
+          },
+          child: Text(
+            "OK",
+            style: TextStyle(color: AppColor.primaryColor, fontSize: 20),
+          ),
+        ),
+      ],
+      style: AlertStyle(
+        animationType: AnimationType.grow,
+        isCloseButton: false,
+        isOverlayTapDismiss: false,
+        descStyle: TextStyle(fontWeight: FontWeight.bold),
+        descTextAlign: TextAlign.start,
+        animationDuration: Duration(milliseconds: 400),
+        alertBorder: RoundedRectangleBorder(
+          borderRadius: BorderRadius.circular(10),
+          side: BorderSide(
+            color: Colors.grey,
+          ),
+        ),
+        titleStyle: TextStyle(
+          color: AppColor.redColor,
+        ),
+        alertAlignment: Alignment.center,
+      ),
+    ).show();
   }
 }
