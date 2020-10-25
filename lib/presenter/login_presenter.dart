@@ -23,6 +23,8 @@ class LoginPresenter implements LoginContractPresenter {
       String dataPw = snapshot.documents[0].data["password"];
       if (dataPw.toString() == password) {
         SharedPreferences preferences = await SharedPreferences.getInstance();
+        await preferences.setString(PreferenceKey.documentId,
+            snapshot.documents[0].documentID.toString());
         await preferences.setString(PreferenceKey.id,
             snapshot.documents[0].data[PreferenceKey.id].toString());
         await preferences.setString(PreferenceKey.name,

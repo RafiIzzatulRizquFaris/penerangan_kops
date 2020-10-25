@@ -9,6 +9,7 @@ class AppColor{
 }
 
 class PreferenceKey{
+  static const String documentId = "document_id";
   static const String id = "id";
   static const String name = "name";
   static const String password = "password";
