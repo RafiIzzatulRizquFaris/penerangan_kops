@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:intl/intl.dart';
 
 class AppColor{
   static const Color redColor = Color(0xfffd7062);
@@ -31,8 +32,8 @@ class Environment {
     return "${date.year}-${date.month}-${date.day}";
   }
   String getTimeNow(){
-    var date = DateTime.now();
-    return "${date.hour}:${date.minute}";
+    var date = DateFormat.Hm().format(DateTime.now());
+    return "${date.split(':')[0]}:${date.split(':')[1]}";
   }
 }
 

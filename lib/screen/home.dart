@@ -25,7 +25,7 @@ class _HomeState extends State<Home> implements AbsensiContractView {
   var isLoadData;
   String name = "Unknown";
   String id;
-  double distanceDouble;
+  double distanceDouble = 0.00;
 
   _HomeState() {
     absensiPresenter = AbsensiPresenter(this);
@@ -34,6 +34,7 @@ class _HomeState extends State<Home> implements AbsensiContractView {
   @override
   void initState() {
     super.initState();
+    distanceMeter();
     initializeDateFormatting();
     isLoadData = true;
     initializePreference();
@@ -83,7 +84,7 @@ class _HomeState extends State<Home> implements AbsensiContractView {
                       children: [
                         Padding(
                           padding: EdgeInsets.only(right: 10,),
-                          child: Text("Jarak Absensi : ${distanceDouble.toInt().toString()} Meter", style: TextStyle(color: AppColor.primaryColor,),),
+                          child: Text("Jarak Absensi : ${distanceDouble.toStringAsFixed(2).toString()} Meter", style: TextStyle(color: AppColor.primaryColor,),),
                         ),
                         IconButton(
                           icon: Icon(
@@ -92,9 +93,13 @@ class _HomeState extends State<Home> implements AbsensiContractView {
                             color: Colors.white,
                           ),
                           onPressed: () async {
-                            await distanceMeter();
+                            Position position = await Geolocator.getCurrentPosition(
+                                desiredAccuracy: LocationAccuracy.high);
+                            var distance = Geolocator.distanceBetween(position.latitude,
+                                position.longitude, Location.LAT, Location.LONG);
                             setState(() {
                               isLoadData = true;
+                              distanceDouble = distance;
                             });
                             absensiPresenter.loadAbsensiData(env.getDateNow());
                           },
@@ -161,11 +166,15 @@ class _HomeState extends State<Home> implements AbsensiContractView {
       floatingActionButtonLocation: FloatingActionButtonLocation.centerFloat,
       floatingActionButton: FloatingActionButton.extended(
         onPressed: () async {
+          print(env.getTimeNow());
           await loadingDialog.show();
-          await distanceMeter();
-          if (distanceDouble <= Location.MAX_DISTANCE) {
+          Position position = await Geolocator.getCurrentPosition(
+              desiredAccuracy: LocationAccuracy.high);
+          var distance = Geolocator.distanceBetween(position.latitude,
+              position.longitude, Location.LAT, Location.LONG);
+          if (distance <= Location.MAX_DISTANCE) {
             absensiPresenter.loadAbsen(id, name, env.getTimeNow(),
-                distanceDouble.toInt().toString(), env.getDateNow());
+                distance.toStringAsFixed(2), env.getDateNow());
           } else {
             await loadingDialog.hide();
             errorAlert("Gagal Absen",
