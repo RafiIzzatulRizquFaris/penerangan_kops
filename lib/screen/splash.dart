@@ -42,10 +42,10 @@ class SplashScreen extends State<Splash> {
             Row(
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
-                TypewriterAnimatedTextKit(
+                FadeAnimatedTextKit(
                   text: ["Sistem Presensi \nPenerangan Kopassus"],
                   totalRepeatCount: 5,
-                  speed: Duration(seconds: 2),
+                  duration: Duration(seconds: 5),
                   pause: Duration(seconds: 1),
                   displayFullTextOnTap: true,
                   textStyle: TextStyle(
