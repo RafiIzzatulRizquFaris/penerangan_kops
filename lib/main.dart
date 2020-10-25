@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:penerangan_kops/constants.dart';
 import 'package:penerangan_kops/screen/splash.dart';
 
 void main() {
@@ -12,6 +13,8 @@ class MyApp extends StatelessWidget {
       title: 'Penerangan Kops',
       debugShowCheckedModeBanner: false,
       theme: ThemeData(
+        primaryColor: AppColor.accentColor,
+        accentColor: AppColor.accentColor,
         primarySwatch: Colors.blue,
       ),
       home: Splash(),
