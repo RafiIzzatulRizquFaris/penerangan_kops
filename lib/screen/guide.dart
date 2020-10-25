@@ -60,69 +60,96 @@ class _GuideState extends State<Guide> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-        body: Column(
-      children: [
-        Container(
+      body: Column(
+        children: [
+          Container(
             width: MediaQuery.of(context).size.width,
-            height: 85,
             decoration: BoxDecoration(
-                color: AppColor.accentColor,
-                borderRadius: BorderRadius.only(
-                    // bottomLeft: Radius.circular(30),
-                    bottomRight: Radius.circular(30))),
-            child: SafeArea(
-                child: Padding(
-              padding: EdgeInsets.all(10),
-              child: Text(
-                "Panduan Registrasi",
-                style: TextStyle(
-                    color: AppColor.primaryColor,
-                    fontSize: 30.0,
-                    fontWeight: FontWeight.bold),
+              color: AppColor.accentColor,
+              borderRadius: BorderRadius.only(
+                bottomLeft: Radius.circular(30),
+                bottomRight: Radius.circular(30),
               ),
-            ))),
-        Expanded(
+            ),
+            child: SafeArea(
+              child: Padding(
+                padding: EdgeInsets.all(20),
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.center,
+                  children: [
+                    Icon(Icons.menu_book_rounded, size: 100, color: AppColor.primaryColor,),
+                    SizedBox(
+                      height: 8,
+                    ),
+                    Text(
+                      "Panduan Registrasi",
+                      textAlign: TextAlign.center,
+                      style: TextStyle(
+                        color: AppColor.primaryColor,
+                        fontSize: 30.0,
+                        fontWeight: FontWeight.bold,
+                      ),
+                    ),
+                    SizedBox(
+                      height: 8,
+                    ),
+                  ],
+                ),
+              ),
+            ),
+          ),
+          Expanded(
             child: Stepper(
-          controlsBuilder: (BuildContext context,
-              {VoidCallback onStepContinue, VoidCallback onStepCancel}) {
-            return Row(
-              children: [
-                FlatButton(
-                    onPressed: onStepContinue,
-                    child: Text("Next",
-                        style: TextStyle(color: AppColor.blackColor))),
-                FlatButton(
-                    onPressed: onStepCancel,
-                    child: Text(
-                      "Back",
-                      style: TextStyle(color: AppColor.blackColor),
-                    )),
-              ],
-            );
-          },
-          onStepContinue: () {
-            if (_currentSteps <= 0) {
-              setState(() {
-                _currentSteps += 1;
-              });
-            }
-          },
-          onStepCancel: () {
-            if (_currentSteps != 0) {
-              setState(() {
-                _currentSteps -= 1;
-              });
-            }
-          },
-          onStepTapped: (step) {
-            setState(() {
-              this._currentSteps = step;
-            });
-          },
-          steps: _stepAccount(),
-          currentStep: _currentSteps,
-        ))
-      ],
-    ));
+              controlsBuilder: (BuildContext context,
+                  {VoidCallback onStepContinue, VoidCallback onStepCancel}) {
+                return Row(
+                  children: [
+                    FlatButton(
+                      onPressed: onStepContinue,
+                      child: Text(
+                        "Next",
+                        style: TextStyle(
+                          color: AppColor.blackColor,
+                        ),
+                      ),
+                    ),
+                    FlatButton(
+                      onPressed: onStepCancel,
+                      child: Text(
+                        "Back",
+                        style: TextStyle(
+                          color: AppColor.blackColor,
+                        ),
+                      ),
+                    ),
+                  ],
+                );
+              },
+              onStepContinue: () {
+                if (_currentSteps <= 0) {
+                  setState(() {
+                    _currentSteps += 1;
+                  });
+                }
+              },
+              onStepCancel: () {
+                if (_currentSteps != 0) {
+                  setState(() {
+                    _currentSteps -= 1;
+                  });
+                }
+              },
+              onStepTapped: (step) {
+                setState(() {
+                  this._currentSteps = step;
+                });
+              },
+              steps: _stepAccount(),
+              currentStep: _currentSteps,
+            ),
+          ),
+        ],
+      ),
+    );
   }
 }

@@ -80,7 +80,7 @@ class _AttandenceState extends State<Attandence>
             child: Padding(
               padding: EdgeInsets.all(14),
               child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
+                crossAxisAlignment: CrossAxisAlignment.center,
                 children: [
                   SafeArea(
                     child: Text(

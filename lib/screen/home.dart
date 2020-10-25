@@ -67,9 +67,14 @@ class _HomeState extends State<Home> implements AbsensiContractView {
       body: Column(
         children: [
           Container(
-            height: 160,
             width: MediaQuery.of(context).size.width,
-            color: AppColor.accentColor,
+            decoration: BoxDecoration(
+              color: AppColor.accentColor,
+              borderRadius: BorderRadius.only(
+                bottomLeft: Radius.circular(30),
+                bottomRight: Radius.circular(30),
+              ),
+            ),
             child: SafeArea(
               child: Padding(
                 padding: EdgeInsets.only(
@@ -78,7 +83,7 @@ class _HomeState extends State<Home> implements AbsensiContractView {
                   bottom: 10,
                 ),
                 child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
+                  crossAxisAlignment: CrossAxisAlignment.center,
                   children: [
                     Row(
                       mainAxisAlignment: MainAxisAlignment.end,
@@ -127,8 +132,12 @@ class _HomeState extends State<Home> implements AbsensiContractView {
                         ),
                       ],
                     ),
+                    SizedBox(
+                      height: 8,
+                    ),
                     Text(
                       "Selamat Datang",
+                      textAlign: TextAlign.center,
                       style: TextStyle(
                         color: Colors.white,
                         fontSize: 20.0,
@@ -137,13 +146,25 @@ class _HomeState extends State<Home> implements AbsensiContractView {
                     SizedBox(
                       height: 8,
                     ),
+                    Icon(
+                      Icons.person_pin,
+                      color: AppColor.primaryColor,
+                      size: 100,
+                    ),
+                    SizedBox(
+                      height: 8,
+                    ),
                     Text(
                       name,
+                      textAlign: TextAlign.center,
                       style: TextStyle(
-                          fontSize: 34.0,
+                          fontSize: 32.0,
                           color: Colors.white,
                           fontWeight: FontWeight.bold),
-                    )
+                    ),
+                    SizedBox(
+                      height: 8,
+                    ),
                   ],
                 ),
               ),

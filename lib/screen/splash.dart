@@ -28,20 +28,24 @@ class SplashScreen extends State<Splash> {
             Row(
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
-                Image.asset(
-                  "assets/kopassus.png",
-                  width: 200,
-                  height: 200,
-                  alignment: Alignment.center,
+                Hero(
+                  tag: 'kopassus',
+                  child: Image.asset(
+                    "assets/kopassus.png",
+                    width: 200,
+                    height: 200,
+                    alignment: Alignment.center,
+                  ),
                 ),
               ],
             ),
             Row(
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
-                RotateAnimatedTextKit(
-                  text: ["Select Your", "Future Leader"],
+                TypewriterAnimatedTextKit(
+                  text: ["Sistem Presensi \nPenerangan Kopassus"],
                   totalRepeatCount: 5,
+                  speed: Duration(seconds: 2),
                   pause: Duration(seconds: 1),
                   displayFullTextOnTap: true,
                   textStyle: TextStyle(

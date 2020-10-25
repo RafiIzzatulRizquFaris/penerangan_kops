@@ -5,22 +5,21 @@ import 'package:penerangan_kops/main_navigation.dart';
 import 'package:penerangan_kops/presenter/login_presenter.dart';
 import 'package:rflutter_alert/rflutter_alert.dart';
 
-class Login extends StatefulWidget{
+class Login extends StatefulWidget {
   @override
   State<StatefulWidget> createState() {
     return LoginScreen();
   }
 }
 
-class LoginScreen extends State<Login> implements LoginContractView{
-
+class LoginScreen extends State<Login> implements LoginContractView {
   TextEditingController idController = TextEditingController();
   TextEditingController passwordController = TextEditingController();
   LoginPresenter _loginPresenter;
   var isLoading;
   var isError;
 
-  LoginScreen(){
+  LoginScreen() {
     _loginPresenter = LoginPresenter(this);
   }
 
@@ -38,65 +37,61 @@ class LoginScreen extends State<Login> implements LoginContractView{
         color: AppColor.accentColor,
         child: isLoading
             ? Center(
-          child: CircularProgressIndicator(
-            backgroundColor: AppColor.primaryColor,
-          ),
-        )
-            : ListView(
-          children: [
-            Column(
-              children: [
-                Row(
-                  children: [
-                    verticalTitle(),
-                    textLogin(),
-                  ],
+                child: CircularProgressIndicator(
+                  backgroundColor: AppColor.primaryColor,
                 ),
-                inputId(),
-                inputPassword(),
-                buttonLogin(),
-              ],
+              )
+            : Center(
+          child: ListView(
+            shrinkWrap: true,
+            children: [
+            Hero(
+              tag: 'kopassus',
+              child: Image.asset(
+                "assets/kopassus.png",
+                width: 100,
+                height: 100,
+                alignment: Alignment.center,
+              ),
             ),
-          ],
+            horizontalTitle(),
+            textLogin(),
+            inputId(),
+            inputPassword(),
+            buttonLogin(),
+          ],),
         ),
       ),
     );
   }
 
-  verticalTitle() {
-    return Padding(
-      padding: EdgeInsets.only(top: 60, left: 10),
-      child: RotatedBox(
-        quarterTurns: -1,
-        child: Text(
-          "Masuk",
-          style: TextStyle(
-              color: AppColor.primaryColor, fontSize: 38, fontWeight: FontWeight.w900),
-        ),
-      ),
+  horizontalTitle() {
+    return Text(
+      "Masuk",
+      textAlign: TextAlign.center,
+      style: TextStyle(
+          color: AppColor.primaryColor,
+          fontSize: 38,
+          fontWeight: FontWeight.w900),
     );
   }
 
   textLogin() {
     return Padding(
-      padding: EdgeInsets.only(top: 50, left: 10),
+      padding: EdgeInsets.only(top: 10, left: 10),
       child: Container(
-        height: 200,
-        width: 200,
         child: Column(
           children: [
-            Container(
-              height: 60,
-            ),
             Center(
               child: Text(
                 "Sistem Presensi \nPenerangan Kopassus",
+                textAlign: TextAlign.center,
                 style: TextStyle(
                   fontSize: 24,
                   color: AppColor.primaryColor,
                 ),
               ),
-            )
+            ),
           ],
         ),
       ),
@@ -177,7 +172,11 @@ class LoginScreen extends State<Login> implements LoginContractView{
 
   buttonLogin() {
     return Padding(
-      padding: EdgeInsets.only(top: 50, right: 50, left: 50,),
+      padding: EdgeInsets.only(
+        top: 50,
+        right: 50,
+        left: 50,
+      ),
       child: Container(
         alignment: Alignment.bottomRight,
         height: 50,
@@ -269,8 +268,8 @@ class LoginScreen extends State<Login> implements LoginContractView{
 
   @override
   setLoginData(String status) {
-    if (status != null){
-      if (status == LoginResponse.SUCCESS){
+    if (status != null) {
+      if (status == LoginResponse.SUCCESS) {
         setState(() {
           isLoading = false;
           isError = false;
@@ -278,18 +277,18 @@ class LoginScreen extends State<Login> implements LoginContractView{
         if (!isLoading && !isError) {
           Navigator.pushReplacement(context,
               MaterialPageRoute(builder: (context) {
-                return MainNavigation();
-              }));
+            return MainNavigation();
+          }));
         } else {
           errorAlert("Error", "Something Wrong");
         }
-      } else if (status == LoginResponse.WRONG_PASSWORD){
+      } else if (status == LoginResponse.WRONG_PASSWORD) {
         setState(() {
           isError = true;
           isLoading = false;
         });
         errorAlert("Wrong Password", "Wrong password on your account");
-      } else if (status == LoginResponse.FAILED){
+      } else if (status == LoginResponse.FAILED) {
         setState(() {
           isError = true;
           isLoading = false;
