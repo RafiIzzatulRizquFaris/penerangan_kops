@@ -147,7 +147,7 @@ class _HomeState extends State<Home> implements AbsensiContractView {
                       height: 8,
                     ),
                     Icon(
-                      Icons.person_pin,
+                      Icons.account_circle,
                       color: AppColor.primaryColor,
                       size: 100,
                     ),
