@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:penerangan_kops/admin_navigation.dart';
 import 'package:penerangan_kops/constants.dart';
 import 'package:penerangan_kops/contract/login_contract.dart';
 import 'package:penerangan_kops/main_navigation.dart';
@@ -42,25 +43,26 @@ class LoginScreen extends State<Login> implements LoginContractView {
                 ),
               )
             : Center(
-          child: ListView(
-            shrinkWrap: true,
-            children: [
-            Hero(
-              tag: 'kopassus',
-              child: Image.asset(
-                "assets/kopassus.png",
-                width: 100,
-                height: 100,
-                alignment: Alignment.center,
+                child: ListView(
+                  shrinkWrap: true,
+                  children: [
+                    Hero(
+                      tag: 'kopassus',
+                      child: Image.asset(
+                        "assets/kopassus.png",
+                        width: 100,
+                        height: 100,
+                        alignment: Alignment.center,
+                      ),
+                    ),
+                    horizontalTitle(),
+                    textLogin(),
+                    inputId(),
+                    inputPassword(),
+                    buttonLogin(),
+                  ],
+                ),
               ),
-            ),
-            horizontalTitle(),
-            textLogin(),
-            inputId(),
-            inputPassword(),
-            buttonLogin(),
-          ],),
-        ),
       ),
     );
   }
@@ -267,28 +269,33 @@ class LoginScreen extends State<Login> implements LoginContractView {
   }
 
   @override
-  setLoginData(String status) {
-    if (status != null) {
-      if (status == LoginResponse.SUCCESS) {
+  setLoginData(List<String> response) {
+    if (response != null) {
+      if (response[0] == LoginResponse.SUCCESS) {
         setState(() {
           isLoading = false;
           isError = false;
         });
-        if (!isLoading && !isError) {
+        if (!isLoading && !isError && response[1] == "0") {
           Navigator.pushReplacement(context,
               MaterialPageRoute(builder: (context) {
             return MainNavigation();
           }));
+        } else if (!isLoading && !isError && response[1] == "1") {
+          Navigator.pushReplacement(context,
+              MaterialPageRoute(builder: (context) {
+            return AdminNavigation();
+          }));
         } else {
           errorAlert("Error", "Something Wrong");
         }
-      } else if (status == LoginResponse.WRONG_PASSWORD) {
+      } else if (response[0] == LoginResponse.WRONG_PASSWORD) {
         setState(() {
           isError = true;
           isLoading = false;
         });
         errorAlert("Wrong Password", "Wrong password on your account");
-      } else if (status == LoginResponse.FAILED) {
+      } else if (response[0] == LoginResponse.FAILED) {
         setState(() {
           isError = true;
           isLoading = false;

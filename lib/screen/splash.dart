@@ -2,6 +2,7 @@ import 'dart:async';
 
 import 'package:animated_text_kit/animated_text_kit.dart';
 import 'package:flutter/material.dart';
+import 'package:penerangan_kops/admin_navigation.dart';
 import 'package:penerangan_kops/constants.dart';
 import 'package:penerangan_kops/screen/login.dart';
 import 'package:penerangan_kops/main_navigation.dart';
@@ -75,13 +76,20 @@ class SplashScreen extends State<Splash> {
     var id = preferences.get(PreferenceKey.id);
     var password = preferences.get(PreferenceKey.password);
     var name = preferences.get(PreferenceKey.name);
+    var admin = preferences.get(PreferenceKey.isAdmin);
     if (id == null && password == null && name == null){
       startLaunching();
     } else {
       print("not null");
-      Navigator.of(context).pushReplacement(MaterialPageRoute(builder: (_) {
-        return MainNavigation();
-      }));
+      if (admin.toString() == "0") {
+        Navigator.of(context).pushReplacement(MaterialPageRoute(builder: (_) {
+          return MainNavigation();
+        }));
+      } else {
+        Navigator.of(context).pushReplacement(MaterialPageRoute(builder: (_) {
+          return AdminNavigation();
+        }));
+      }
     }
   }
 
