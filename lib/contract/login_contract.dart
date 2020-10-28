@@ -1,5 +1,5 @@
 class LoginContractView {
-  setLoginData(String status) {}
+  setLoginData(List<String> response) {}
   setOnErrorLogin(error) {}
 }
 
