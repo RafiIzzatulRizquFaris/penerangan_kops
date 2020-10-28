@@ -158,9 +158,10 @@ class _HomeState extends State<Home> implements AbsensiContractView {
                       name,
                       textAlign: TextAlign.center,
                       style: TextStyle(
-                          fontSize: 32.0,
-                          color: Colors.white,
-                          fontWeight: FontWeight.bold),
+                        fontSize: 32.0,
+                        color: Colors.white,
+                        fontWeight: FontWeight.bold,
+                      ),
                     ),
                     SizedBox(
                       height: 8,
@@ -297,12 +298,28 @@ class _HomeState extends State<Home> implements AbsensiContractView {
           color: AppColor.blackColor,
           size: 40,
         ),
-        title: Text(
-          listAbsensi[index].data["name"],
-          style: TextStyle(
-              color: AppColor.blackColor,
-              fontWeight: FontWeight.w600,
-              fontSize: 18.0),
+        title: FutureBuilder(
+          future: futureName(listAbsensi[index].data["nrp"]),
+          builder: (context, snapshot){
+            if (snapshot.data == null){
+              return Text(
+                "Unknown",
+                style: TextStyle(
+                  color: AppColor.blackColor,
+                  fontWeight: FontWeight.w600,
+                  fontSize: 18.0,
+                ),
+              );
+            }
+            return Text(
+              snapshot.data,
+              style: TextStyle(
+                  color: AppColor.blackColor,
+                  fontWeight: FontWeight.w600,
+                  fontSize: 18.0,
+              ),
+            );
+          }
         ),
         trailing: Text(
           listAbsensi[index].data["time"],
@@ -414,5 +431,17 @@ class _HomeState extends State<Home> implements AbsensiContractView {
         alertAlignment: Alignment.center,
       ),
     ).show();
+  }
+
+  Future<String> futureName(data) async {
+    Firestore firestore = Firestore.instance;
+    QuerySnapshot snapshot = await firestore
+        .collection('user')
+        .where(
+      "nrp",
+      isEqualTo: data,
+    )
+        .getDocuments();
+    return snapshot.documents[0].data['name'];
   }
 }

@@ -52,24 +52,24 @@ class _AttandenceState extends State<Attandence>
               color: Colors.white,
               child: isLoadData
                   ? Center(
-                child: CircularProgressIndicator(
-                  backgroundColor: AppColor.accentColor,
-                ),
-              )
+                      child: CircularProgressIndicator(
+                        backgroundColor: AppColor.accentColor,
+                      ),
+                    )
                   : listAbsensi.isEmpty
-                  ? Center(
-                child: Text(
-                  "Data Absensi Kosong",
-                  style: TextStyle(
-                    color: AppColor.accentColor,
-                    fontSize: 18,
-                  ),
-                ),
-              )
-                  : ListView.builder(
-                itemCount: listAbsensi.length,
-                itemBuilder: itemBuilderAbsensi,
-              ),
+                      ? Center(
+                          child: Text(
+                            "Data Absensi Kosong",
+                            style: TextStyle(
+                              color: AppColor.accentColor,
+                              fontSize: 18,
+                            ),
+                          ),
+                        )
+                      : ListView.builder(
+                          itemCount: listAbsensi.length,
+                          itemBuilder: itemBuilderAbsensi,
+                        ),
             ),
             heightBehavior: SnappingSheetHeight.fit()),
         grabbing: GrabSection(),
@@ -169,12 +169,28 @@ class _AttandenceState extends State<Attandence>
           color: AppColor.blackColor,
           size: 40,
         ),
-        title: Text(
-          listAbsensi[index].data["name"],
-          style: TextStyle(
-              color: AppColor.blackColor,
-              fontWeight: FontWeight.w600,
-              fontSize: 18.0),
+        title: FutureBuilder(
+          future: futureName(listAbsensi[index].data["nrp"]),
+          builder: (context, snapshot) {
+            if (snapshot.data == null) {
+              return Text(
+                "Unknown",
+                style: TextStyle(
+                  color: AppColor.blackColor,
+                  fontWeight: FontWeight.w600,
+                  fontSize: 18.0,
+                ),
+              );
+            }
+            return Text(
+              snapshot.data,
+              style: TextStyle(
+                color: AppColor.blackColor,
+                fontWeight: FontWeight.w600,
+                fontSize: 18.0,
+              ),
+            );
+          },
         ),
         trailing: Text(
           listAbsensi[index].data["time"],
@@ -186,5 +202,17 @@ class _AttandenceState extends State<Attandence>
         ),
       ),
     );
+  }
+
+  Future<String> futureName(data) async {
+    Firestore firestore = Firestore.instance;
+    QuerySnapshot snapshot = await firestore
+        .collection('user')
+        .where(
+          "nrp",
+          isEqualTo: data,
+        )
+        .getDocuments();
+    return snapshot.documents[0].data['name'];
   }
 }
