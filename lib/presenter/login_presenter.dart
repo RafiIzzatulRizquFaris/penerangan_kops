@@ -9,12 +9,12 @@ class LoginPresenter implements LoginContractPresenter {
   LoginPresenter(this._loginContractView);
 
   @override
-  Future<String> getLoginData(String id, String password) async {
+  Future<List<String>> getLoginData(String id, String password) async {
     final Firestore _firestore = Firestore.instance;
     QuerySnapshot snapshot = await _firestore
         .collection('user')
         .where(
-          "id",
+          "telephone",
           isEqualTo: id,
         )
         .getDocuments();
@@ -31,12 +31,14 @@ class LoginPresenter implements LoginContractPresenter {
             snapshot.documents[0].data[PreferenceKey.name].toString());
         await preferences.setString(PreferenceKey.password,
             snapshot.documents[0].data[PreferenceKey.password].toString());
-        return LoginResponse.SUCCESS;
+        await preferences.setString(PreferenceKey.isAdmin,
+            snapshot.documents[0].data[PreferenceKey.isAdmin].toString());
+        return [LoginResponse.SUCCESS, snapshot.documents[0].data[PreferenceKey.isAdmin]];
       } else {
-        return LoginResponse.WRONG_PASSWORD;
+        return [LoginResponse.WRONG_PASSWORD];
       }
     } else {
-      return LoginResponse.FAILED;
+      return [LoginResponse.FAILED];
     }
   }
 

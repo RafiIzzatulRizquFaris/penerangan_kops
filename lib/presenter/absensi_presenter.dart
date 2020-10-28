@@ -47,10 +47,9 @@ class AbsensiPresenter implements AbsensiContractPresenter {
       DocumentReference documentReference =
           await collectionReference.add(<String, dynamic>{
         'date': date,
-        'name': name,
         'range': range,
         'time': time,
-        'user-id': id,
+        'nrp': id,
       });
       if (documentReference.documentID != null) {
         return AbsenResponse.SUCCESS;
