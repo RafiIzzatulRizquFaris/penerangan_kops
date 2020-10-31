@@ -21,10 +21,26 @@ class AbsensiPresenter implements AbsensiContractPresenter {
   }
 
   @override
+  Future<List<DocumentSnapshot>> getSummary() async {
+    QuerySnapshot snapshot =
+        await firestore.collection('presensi')
+        .orderBy("date", descending: true )
+        .getDocuments();
+    return snapshot.documents;
+  }
+
+  @override
   loadAbsensiData(String date) {
     getAbsensiData(date)
         .then((value) => _absensiContractView.setAbsensiData(value))
         .catchError((error) => _absensiContractView.setOnErrorAbsensi(error));
+  }
+
+  @override
+  loadSummaryData() {
+    getSummary()
+        .then((value) => _absensiContractView.setAbsensiData(value))
+        .catchError((error) => _absensiContractView.onErrorAbsen(error));
   }
 
   @override

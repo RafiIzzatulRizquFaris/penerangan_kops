@@ -3,7 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:penerangan_kops/contract/user_data_contract.dart';
 import 'package:penerangan_kops/presenter/user_data_presenter.dart';
-
+import 'package:penerangan_kops/screen/admin/pdf_preview.dart';
 import '../../constants.dart';
 
 class DataUser extends StatefulWidget {
@@ -32,6 +32,15 @@ class DataUserScreen extends State<DataUser> implements UserDataContractView {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      floatingActionButton: FloatingActionButton.extended(
+          onPressed: () async {
+            Navigator.push(
+                context, MaterialPageRoute(builder: (context) => PdfPreview()));
+          },
+          icon: Icon(Icons.print),
+          backgroundColor: AppColor.redColor,
+          label: Text("Print to PDF")),
+      floatingActionButtonLocation: FloatingActionButtonLocation.centerFloat,
       body: Column(
         children: [
           Container(
@@ -50,7 +59,7 @@ class DataUserScreen extends State<DataUser> implements UserDataContractView {
                   crossAxisAlignment: CrossAxisAlignment.center,
                   children: [
                     Icon(
-                      Icons.menu_book_rounded,
+                      Icons.article,
                       size: 100,
                       color: AppColor.primaryColor,
                     ),
@@ -133,10 +142,12 @@ class DataUserScreen extends State<DataUser> implements UserDataContractView {
             fontSize: 18.0,
           ),
         ),
-        trailing: Text(
-          documentSnapshot[index].data["satuan"],
-          style: TextStyle(fontSize: 20.0, color: AppColor.blackColor),
-        ),
+        trailing: IconButton(
+            icon: Icon(
+              Icons.delete,
+              color: AppColor.redColor,
+            ),
+            onPressed: null),
         subtitle: Text(
           documentSnapshot[index].data["nrp"],
           style: TextStyle(color: AppColor.blackColor),
