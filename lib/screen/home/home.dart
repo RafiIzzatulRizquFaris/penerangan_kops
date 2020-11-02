@@ -7,10 +7,12 @@ import 'package:intl/intl.dart';
 import 'package:penerangan_kops/constants.dart';
 import 'package:penerangan_kops/contract/absensi_contract.dart';
 import 'package:penerangan_kops/presenter/absensi_presenter.dart';
+import 'package:penerangan_kops/screen/home/component/ItemAbsensi.dart';
 import 'package:progress_dialog/progress_dialog.dart';
 import 'package:rflutter_alert/rflutter_alert.dart';
 import 'package:shared_preferences/shared_preferences.dart';
-import '../constants.dart';
+import '../../constants.dart';
+import 'utilsHome.dart';
 
 class Home extends StatefulWidget {
   @override
@@ -18,12 +20,12 @@ class Home extends StatefulWidget {
 }
 
 class _HomeState extends State<Home> implements AbsensiContractView {
+  var isLoadData;
   AbsensiPresenter absensiPresenter;
   List<DocumentSnapshot> listAbsensi = List<DocumentSnapshot>();
   Environment env = Environment();
   SharedPreferences preferences;
   ProgressDialog loadingDialog;
-  var isLoadData;
   String name = "Unknown";
   String id;
   double distanceDouble = 0.00;
@@ -108,7 +110,7 @@ class _HomeState extends State<Home> implements AbsensiContractView {
                           onPressed: () async {
                             if (!(await Geolocator
                                 .isLocationServiceEnabled())) {
-                              alertLocation("Lokasi Anda Tidak Aktif",
+                              UtilsHome.alertLocation("Lokasi Anda Tidak Aktif",
                                   "Silahkan aktifkan GPS anda", context);
                             } else {
                               Position position =
@@ -175,7 +177,7 @@ class _HomeState extends State<Home> implements AbsensiContractView {
             child: Padding(
               padding: EdgeInsets.fromLTRB(0, 16, 0, 0),
               child: Text(
-                todayDate(),
+                UtilsHome.todayDate(context),
                 style: TextStyle(
                     color: AppColor.redColor, fontWeight: FontWeight.w400),
               ),
@@ -200,7 +202,7 @@ class _HomeState extends State<Home> implements AbsensiContractView {
                       )
                     : ListView.builder(
                         itemCount: listAbsensi.length,
-                        itemBuilder: builderAbsensi,
+                        itemBuilder: (BuildContext context, int index) => ItemAbsensi(listAbsensi[index]),
                       ),
           ),
         ],
@@ -209,7 +211,7 @@ class _HomeState extends State<Home> implements AbsensiContractView {
       floatingActionButton: FloatingActionButton.extended(
         onPressed: () async {
           if (!(await Geolocator.isLocationServiceEnabled())) {
-            alertLocation("Lokasi Anda Tidak Aktif",
+            UtilsHome.alertLocation("Lokasi Anda Tidak Aktif",
                 "Silahkan aktifkan GPS anda", context);
           } else {
             await loadingDialog.show();
@@ -222,8 +224,8 @@ class _HomeState extends State<Home> implements AbsensiContractView {
                   distance.toStringAsFixed(2), env.getDateNow());
             } else {
               await loadingDialog.hide();
-              errorAlert("Gagal Absen",
-                  "Jarak anda terlalu jauh, silahkan lebih dekat dengan lokasi yang ditentukan");
+              UtilsHome.errorAlert("Gagal Absen",
+                  "Jarak anda terlalu jauh, silahkan lebih dekat dengan lokasi yang ditentukan",context);
             }
           }
         },
@@ -246,7 +248,7 @@ class _HomeState extends State<Home> implements AbsensiContractView {
   onErrorAbsen(error) async {
     print(error.toString());
     await loadingDialog.hide();
-    errorAlert("Gagal Absen", "Sesuatu bermasalah,silahkan hubungi pengembang");
+    UtilsHome.errorAlert("Gagal Absen", "Sesuatu bermasalah,silahkan hubungi pengembang", context);
   }
 
   @override
@@ -257,22 +259,21 @@ class _HomeState extends State<Home> implements AbsensiContractView {
           isLoadData = true;
         });
         absensiPresenter.loadAbsensiData(env.getDateNow());
-        print("Success");
         await loadingDialog.hide();
       } else if (status == AbsenResponse.ALREADY) {
         print("already");
         await loadingDialog.hide();
-        errorAlert("Sudah Absen",
-            "Terimakasih, anda sudah absen. Tidak perlu absen lagi");
+        UtilsHome.errorAlert("Sudah Absen",
+            "Terimakasih, anda sudah absen. Tidak perlu absen lagi", context);
       } else {
         print("failed");
         await loadingDialog.hide();
-        errorAlert("Gagal Absen", "Silahkan cek koneksi dan nyalakan GPS");
+        UtilsHome.errorAlert("Gagal Absen", "Silahkan cek koneksi dan nyalakan GPS", context);
       }
     } else {
       print("failed");
       await loadingDialog.hide();
-      errorAlert("Gagal Absen", "Silahkan cek koneksi dan nyalakan GPS");
+      UtilsHome.errorAlert("Gagal Absen", "Silahkan cek koneksi dan nyalakan GPS", context);
     }
   }
 
@@ -289,99 +290,12 @@ class _HomeState extends State<Home> implements AbsensiContractView {
     print(error.toString());
   }
 
-  Widget builderAbsensi(BuildContext context, int index) {
-    return Padding(
-      padding: EdgeInsets.all(8),
-      child: ListTile(
-        leading: Icon(
-          Icons.person,
-          color: AppColor.blackColor,
-          size: 40,
-        ),
-        title: FutureBuilder(
-          future: futureName(listAbsensi[index].data["nrp"]),
-          builder: (context, snapshot){
-            if (snapshot.data == null){
-              return Text(
-                "Unknown",
-                style: TextStyle(
-                  color: AppColor.blackColor,
-                  fontWeight: FontWeight.w600,
-                  fontSize: 18.0,
-                ),
-              );
-            }
-            return Text(
-              snapshot.data,
-              style: TextStyle(
-                  color: AppColor.blackColor,
-                  fontWeight: FontWeight.w600,
-                  fontSize: 18.0,
-              ),
-            );
-          }
-        ),
-        trailing: Text(
-          listAbsensi[index].data["time"],
-          style: TextStyle(fontSize: 20.0, color: AppColor.blackColor),
-        ),
-        subtitle: Text(
-          "${listAbsensi[index].data["range"]} Meter",
-          style: TextStyle(color: AppColor.blackColor),
-        ),
-      ),
-    );
-  }
-
   initializePreference() async {
     preferences = await SharedPreferences.getInstance();
     setState(() {
       name = preferences.get(PreferenceKey.name).toString();
       id = preferences.get(PreferenceKey.id).toString();
     });
-  }
-
-  errorAlert(String title, String subtitle) {
-    return Alert(
-      context: context,
-      title: title,
-      desc: subtitle,
-      type: AlertType.warning,
-      buttons: [
-        DialogButton(
-          onPressed: () => Navigator.pop(context),
-          child: Text(
-            "OK",
-            style: TextStyle(color: AppColor.primaryColor, fontSize: 20),
-          ),
-        ),
-      ],
-      style: AlertStyle(
-        animationType: AnimationType.grow,
-        isCloseButton: false,
-        isOverlayTapDismiss: false,
-        descStyle: TextStyle(fontWeight: FontWeight.bold),
-        descTextAlign: TextAlign.start,
-        animationDuration: Duration(milliseconds: 400),
-        alertBorder: RoundedRectangleBorder(
-          borderRadius: BorderRadius.circular(10),
-          side: BorderSide(
-            color: Colors.grey,
-          ),
-        ),
-        titleStyle: TextStyle(
-          color: AppColor.redColor,
-        ),
-        alertAlignment: Alignment.center,
-      ),
-    ).show();
-  }
-
-  String todayDate() {
-    DateTime today = DateTime.now();
-    String languageCode = Localizations.localeOf(context).languageCode;
-    DateFormat format = DateFormat('dd MMMM yyyy', languageCode);
-    return format.format(today);
   }
 
   distanceMeter() async {
@@ -394,54 +308,5 @@ class _HomeState extends State<Home> implements AbsensiContractView {
     });
   }
 
-  alertLocation(String title, String subtitle, BuildContext context) {
-    return Alert(
-      context: context,
-      title: title,
-      desc: subtitle,
-      type: AlertType.warning,
-      buttons: [
-        DialogButton(
-          onPressed: () {
-            AppSettings.openLocationSettings();
-            Navigator.pop(context);
-          },
-          child: Text(
-            "OK",
-            style: TextStyle(color: AppColor.primaryColor, fontSize: 20),
-          ),
-        ),
-      ],
-      style: AlertStyle(
-        animationType: AnimationType.grow,
-        isCloseButton: false,
-        isOverlayTapDismiss: false,
-        descStyle: TextStyle(fontWeight: FontWeight.bold),
-        descTextAlign: TextAlign.start,
-        animationDuration: Duration(milliseconds: 400),
-        alertBorder: RoundedRectangleBorder(
-          borderRadius: BorderRadius.circular(10),
-          side: BorderSide(
-            color: Colors.grey,
-          ),
-        ),
-        titleStyle: TextStyle(
-          color: AppColor.redColor,
-        ),
-        alertAlignment: Alignment.center,
-      ),
-    ).show();
-  }
-
-  Future<String> futureName(data) async {
-    Firestore firestore = Firestore.instance;
-    QuerySnapshot snapshot = await firestore
-        .collection('user')
-        .where(
-      "nrp",
-      isEqualTo: data,
-    )
-        .getDocuments();
-    return snapshot.documents[0].data['name'];
-  }
+ 
 }

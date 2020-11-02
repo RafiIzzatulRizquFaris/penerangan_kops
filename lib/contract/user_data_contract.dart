@@ -1,11 +1,15 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 
-class UserDataContractView{
+class UserDataContractView {
   onSuccessUserData(List<DocumentSnapshot> value) {}
-  onErrorUserData(error){}
+  onErrorUserData(error) {}
+  onSuccessDelete(String value) {}
 }
 
-class UserDataContractPresenter{
-  getUserData (){}
-  loadUserData (){}
+class UserDataContractPresenter {
+  getUserData() {}
+  loadUserData() {}
+
+  deleteUserData(String nrp) {}
+  deletingUserData(String nrp) {}
 }

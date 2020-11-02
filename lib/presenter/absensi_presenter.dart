@@ -22,25 +22,11 @@ class AbsensiPresenter implements AbsensiContractPresenter {
 
   @override
   Future<List<DocumentSnapshot>> getSummary() async {
-    QuerySnapshot snapshot =
-        await firestore.collection('presensi')
-        .orderBy("date", descending: true )
+    QuerySnapshot snapshot = await firestore
+        .collection('presensi')
+        .orderBy("date", descending: true)
         .getDocuments();
     return snapshot.documents;
-  }
-
-  @override
-  loadAbsensiData(String date) {
-    getAbsensiData(date)
-        .then((value) => _absensiContractView.setAbsensiData(value))
-        .catchError((error) => _absensiContractView.setOnErrorAbsensi(error));
-  }
-
-  @override
-  loadSummaryData() {
-    getSummary()
-        .then((value) => _absensiContractView.setAbsensiData(value))
-        .catchError((error) => _absensiContractView.onErrorAbsen(error));
   }
 
   @override
@@ -62,6 +48,7 @@ class AbsensiPresenter implements AbsensiContractPresenter {
           firestore.collection('presensi');
       DocumentReference documentReference =
           await collectionReference.add(<String, dynamic>{
+        'name' : name,
         'date': date,
         'range': range,
         'time': time,
@@ -81,6 +68,20 @@ class AbsensiPresenter implements AbsensiContractPresenter {
   loadAbsen(String id, String name, String time, String range, String date) {
     getAbsen(id, name, time, range, date)
         .then((value) => _absensiContractView.onSuccessAbsen(value))
+        .catchError((error) => _absensiContractView.onErrorAbsen(error));
+  }
+
+  @override
+  loadAbsensiData(String date) {
+    getAbsensiData(date)
+        .then((value) => _absensiContractView.setAbsensiData(value))
+        .catchError((error) => _absensiContractView.setOnErrorAbsensi(error));
+  }
+
+  @override
+  loadSummaryData() {
+    getSummary()
+        .then((value) => _absensiContractView.setAbsensiData(value))
         .catchError((error) => _absensiContractView.onErrorAbsen(error));
   }
 }

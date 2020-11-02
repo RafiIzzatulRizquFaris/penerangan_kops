@@ -147,12 +147,23 @@ class DataUserScreen extends State<DataUser> implements UserDataContractView {
               Icons.delete,
               color: AppColor.redColor,
             ),
-            onPressed: null),
+            onPressed: () {
+              _userDataPresenter
+                  .deletingUserData(documentSnapshot[index].data["nrp"]);
+              setState(() {
+                isLoading = true;
+              });
+            }),
         subtitle: Text(
           documentSnapshot[index].data["nrp"],
           style: TextStyle(color: AppColor.blackColor),
         ),
       ),
     );
+  }
+
+  @override
+  onSuccessDelete(String value) {
+    _userDataPresenter.loadUserData();
   }
 }

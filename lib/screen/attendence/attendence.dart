@@ -2,10 +2,11 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:penerangan_kops/contract/absensi_contract.dart';
 import 'package:penerangan_kops/presenter/absensi_presenter.dart';
+import 'package:penerangan_kops/screen/attendence/component/itemAbsensiCalendar.dart';
 import 'package:penerangan_kops/screen/component/grabing.dart';
 import 'package:snapping_sheet/snapping_sheet.dart';
 import 'package:table_calendar/table_calendar.dart';
-import '../constants.dart';
+import '../../constants.dart';
 
 class Attandence extends StatefulWidget {
   @override
@@ -68,7 +69,8 @@ class _AttandenceState extends State<Attandence>
                         )
                       : ListView.builder(
                           itemCount: listAbsensi.length,
-                          itemBuilder: itemBuilderAbsensi,
+                          itemBuilder: (BuildContext context, int index) =>
+                              ItemAbsensiCalendar(listAbsensi[index]),
                         ),
             ),
             heightBehavior: SnappingSheetHeight.fit()),
@@ -158,61 +160,5 @@ class _AttandenceState extends State<Attandence>
   @override
   setOnErrorAbsensi(error) {
     print(error.toString());
-  }
-
-  Widget itemBuilderAbsensi(BuildContext context, int index) {
-    return Padding(
-      padding: EdgeInsets.all(8),
-      child: ListTile(
-        leading: Icon(
-          Icons.person,
-          color: AppColor.blackColor,
-          size: 40,
-        ),
-        title: FutureBuilder(
-          future: futureName(listAbsensi[index].data["nrp"]),
-          builder: (context, snapshot) {
-            if (snapshot.data == null) {
-              return Text(
-                "Unknown",
-                style: TextStyle(
-                  color: AppColor.blackColor,
-                  fontWeight: FontWeight.w600,
-                  fontSize: 18.0,
-                ),
-              );
-            }
-            return Text(
-              snapshot.data,
-              style: TextStyle(
-                color: AppColor.blackColor,
-                fontWeight: FontWeight.w600,
-                fontSize: 18.0,
-              ),
-            );
-          },
-        ),
-        trailing: Text(
-          listAbsensi[index].data["time"],
-          style: TextStyle(fontSize: 20.0, color: AppColor.blackColor),
-        ),
-        subtitle: Text(
-          "${listAbsensi[index].data["range"]} Meter",
-          style: TextStyle(color: AppColor.blackColor),
-        ),
-      ),
-    );
-  }
-
-  Future<String> futureName(data) async {
-    Firestore firestore = Firestore.instance;
-    QuerySnapshot snapshot = await firestore
-        .collection('user')
-        .where(
-          "nrp",
-          isEqualTo: data,
-        )
-        .getDocuments();
-    return snapshot.documents[0].data['name'];
   }
 }

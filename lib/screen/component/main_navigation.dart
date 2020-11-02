@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
-import 'package:penerangan_kops/screen/attendence.dart';
+import 'package:penerangan_kops/screen/attendence/attendence.dart';
 import 'package:penerangan_kops/constants.dart';
-import 'package:penerangan_kops/screen/home.dart';
+import 'package:penerangan_kops/screen/home/home.dart';
 import 'package:penerangan_kops/screen/profile.dart';
 
 class MainNavigation extends StatefulWidget{
@@ -42,11 +42,6 @@ class MainNavigationScreen extends State<MainNavigation>{
               label: "Kehadiran",
               activeIcon: Icon(Icons.calendar_today, color: AppColor.redColor,),
             ),
-            // BottomNavigationBarItem(
-            //   icon: Icon(Icons.help, color: AppColor.blackColor,),
-            //   label: "Panduan",
-            //   activeIcon: Icon(Icons.help, color: AppColor.redColor,),
-            // ),
             BottomNavigationBarItem(
               icon: Icon(Icons.person, color: AppColor.blackColor,),
               label: "Profil",

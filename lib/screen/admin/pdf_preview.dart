@@ -6,12 +6,11 @@ import 'package:pdf/widgets.dart' as pw;
 import 'package:path_provider/path_provider.dart';
 import 'package:pdf/pdf.dart';
 import 'dart:io';
-
 import 'package:penerangan_kops/presenter/absensi_presenter.dart';
-
 import '../../constants.dart';
 
 class PdfPreview extends StatefulWidget {
+
   @override
   _PdfPreviewState createState() => _PdfPreviewState();
 }
@@ -24,24 +23,16 @@ class _PdfPreviewState extends State<PdfPreview>
   List<DocumentSnapshot> listAttendence = List<DocumentSnapshot>();
   final pdf = pw.Document();
 
+  _PdfPreviewState() {
+    _absensiPresenter = AbsensiPresenter(this);
+  }
+
   final tableHeaders = [
     'NRP',
     "Nama",
     'Tanggal',
     'Jam',
   ];
-
-  _PdfPreviewState() {
-    _absensiPresenter = AbsensiPresenter(this);
-  }
-
-  // writeOnPdf();
-  //           await savePdf();
-  //           Directory documentDirectory =
-  //               await getApplicationDocumentsDirectory();
-
-  //           String documentPath = documentDirectory.path;
-  //           String fullPath = "$documentPath/report.pdf";
 
   @override
   void initState() {
@@ -90,14 +81,9 @@ class _PdfPreviewState extends State<PdfPreview>
 
   @override
   setAbsensiData(List<DocumentSnapshot> value) {
-    print("get data");
     if (value != null) {
-      setState(() {
-        listAttendence = value;
-        print("data fire : " + listAttendence[0].data["nrp"]);
-        writeOnPdf();
-        print("clear");
-      });
+      listAttendence = value;
+      writeOnPdf();
     }
   }
 
@@ -108,7 +94,6 @@ class _PdfPreviewState extends State<PdfPreview>
   }
 
   writeOnPdf() async {
-    print("write");
     pdf.addPage(pw.MultiPage(
       pageFormat: PdfPageFormat.a5,
       margin: pw.EdgeInsets.all(32),
@@ -149,6 +134,7 @@ class _PdfPreviewState extends State<PdfPreview>
               tableHeaders.length,
               (col) => tableHeaders[col],
             ),
+
             data: List<List<String>>.generate(
               listAttendence.length,
               (row) => List<String>.generate(
@@ -173,15 +159,17 @@ class _PdfPreviewState extends State<PdfPreview>
     });
   }
 
-  String indexing(int i){
+  String indexing(int i) {
     switch (i) {
       case 0:
         return "nrp";
         break;
-      case 1: 
-      return "time";
+      case 1:
+        return "name";
       case 2:
-      return "date";
+        return "date";
+      case 3:
+        return "time";
       default:
     }
   }

@@ -2,10 +2,10 @@ import 'dart:async';
 
 import 'package:animated_text_kit/animated_text_kit.dart';
 import 'package:flutter/material.dart';
-import 'package:penerangan_kops/admin_navigation.dart';
+import 'package:penerangan_kops/screen/component/admin_navigation.dart';
 import 'package:penerangan_kops/constants.dart';
 import 'package:penerangan_kops/screen/login.dart';
-import 'package:penerangan_kops/main_navigation.dart';
+import 'package:penerangan_kops/screen/component/main_navigation.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 class Splash extends StatefulWidget{
@@ -80,7 +80,6 @@ class SplashScreen extends State<Splash> {
     if (id == null && password == null && name == null){
       startLaunching();
     } else {
-      print("not null");
       if (admin.toString() == "0") {
         Navigator.of(context).pushReplacement(MaterialPageRoute(builder: (_) {
           return MainNavigation();
