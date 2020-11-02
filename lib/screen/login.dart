@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
-import 'package:penerangan_kops/admin_navigation.dart';
+import 'package:penerangan_kops/screen/component/admin_navigation.dart';
 import 'package:penerangan_kops/constants.dart';
 import 'package:penerangan_kops/contract/login_contract.dart';
-import 'package:penerangan_kops/main_navigation.dart';
+import 'package:penerangan_kops/screen/component/main_navigation.dart';
 import 'package:penerangan_kops/presenter/login_presenter.dart';
 import 'package:rflutter_alert/rflutter_alert.dart';
 

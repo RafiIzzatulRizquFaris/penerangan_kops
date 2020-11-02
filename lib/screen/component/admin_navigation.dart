@@ -2,10 +2,10 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:penerangan_kops/screen/admin/data_user.dart';
 import 'package:penerangan_kops/screen/admin/guide.dart';
-import 'package:penerangan_kops/screen/attendence.dart';
+import 'package:penerangan_kops/screen/attendence/attendence.dart';
 import 'package:penerangan_kops/screen/profile.dart';
 
-import 'constants.dart';
+import '../../constants.dart';
 
 class AdminNavigation extends StatefulWidget {
   @override
