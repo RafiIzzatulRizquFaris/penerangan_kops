@@ -5,12 +5,12 @@ import 'package:penerangan_kops/contract/absensi_contract.dart';
 import 'package:pdf/widgets.dart' as pw;
 import 'package:path_provider/path_provider.dart';
 import 'package:pdf/pdf.dart';
+import 'package:share/share.dart';
 import 'dart:io';
 import 'package:penerangan_kops/presenter/absensi_presenter.dart';
 import '../../constants.dart';
 
 class PdfPreview extends StatefulWidget {
-
   @override
   _PdfPreviewState createState() => _PdfPreviewState();
 }
@@ -22,6 +22,7 @@ class _PdfPreviewState extends State<PdfPreview>
   AbsensiPresenter _absensiPresenter;
   List<DocumentSnapshot> listAttendence = List<DocumentSnapshot>();
   final pdf = pw.Document();
+  List<String> pathfiles = List<String>();
 
   _PdfPreviewState() {
     _absensiPresenter = AbsensiPresenter(this);
@@ -40,7 +41,6 @@ class _PdfPreviewState extends State<PdfPreview>
     super.initState();
     isLoading = true;
     _absensiPresenter.loadSummaryData();
-    print("init");
   }
 
   @override
@@ -59,7 +59,14 @@ class _PdfPreviewState extends State<PdfPreview>
               actions: <Widget>[
                 IconButton(
                   icon: Icon(Icons.share),
-                  onPressed: () {},
+                  onPressed: () {
+                    final RenderBox box = context.findRenderObject();
+                    Share.shareFiles(pathfiles,
+                        text: "Report file",
+                        subject: "report penerangan kopassus",
+                        sharePositionOrigin:
+                            box.localToGlobal(Offset.zero) & box.size);
+                  },
                 ),
               ],
             ),
@@ -134,7 +141,6 @@ class _PdfPreviewState extends State<PdfPreview>
               tableHeaders.length,
               (col) => tableHeaders[col],
             ),
-
             data: List<List<String>>.generate(
               listAttendence.length,
               (row) => List<String>.generate(
@@ -155,6 +161,7 @@ class _PdfPreviewState extends State<PdfPreview>
     file.writeAsBytesSync(pdf.save());
     print("$path : path");
     setState(() {
+      pathfiles.add(path);
       isLoading = false;
     });
   }

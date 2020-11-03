@@ -14,19 +14,20 @@ class UserDataPresenter implements UserDataContractPresenter {
 
   @override
   Future<String> deleteUserData(String nrp) async {
-    QuerySnapshot snapshot = await firestore
-        .collection('user')
-        .where("nrp", isEqualTo: nrp)
-        .getDocuments();
-
-    if (snapshot.documents.isNotEmpty) {
-      await firestore
+    if (nrp != "1434236") {
+      QuerySnapshot snapshot = await firestore
           .collection('user')
-          .document(snapshot.documents[0].documentID)
-          .delete();
-      return "sucess";
-    }
+          .where("nrp", isEqualTo: nrp)
+          .getDocuments();
 
+      if (snapshot.documents.isNotEmpty) {
+        await firestore
+            .collection('user')
+            .document(snapshot.documents[0].documentID)
+            .delete();
+        return "sucess";
+      }
+    }
     return "failed";
   }
 

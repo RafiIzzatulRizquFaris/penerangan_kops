@@ -31,6 +31,7 @@ dependencies:
   animated_text_kit: ^2.2.0
   flutter_full_pdf_viewer: ^1.0.6
   rflutter_alert: any
+  share: ^0.6.5+4
   geolocator: ^6.1.1
   table_calendar: ^2.3.0
   snapping_sheet: ^2.0.1
