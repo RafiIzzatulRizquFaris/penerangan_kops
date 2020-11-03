@@ -159,7 +159,6 @@ class _PdfPreviewState extends State<PdfPreview>
     File file = File(path);
 
     file.writeAsBytesSync(pdf.save());
-    print("$path : path");
     setState(() {
       pathfiles.add(path);
       isLoading = false;
