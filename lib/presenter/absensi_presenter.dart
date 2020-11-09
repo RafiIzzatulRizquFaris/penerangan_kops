@@ -39,16 +39,17 @@ class AbsensiPresenter implements AbsensiContractPresenter {
           isEqualTo: date,
         )
         .where(
-          "user-id",
+          "nrp",
           isEqualTo: id,
         )
         .getDocuments();
-    if (querySnapshot.documents.length == 0) {
+    print("${querySnapshot.documents.length} data absen");
+    if (querySnapshot.documents.length == 0 || querySnapshot.documents.isEmpty) {
       CollectionReference collectionReference =
           firestore.collection('presensi');
       DocumentReference documentReference =
           await collectionReference.add(<String, dynamic>{
-        'name' : name,
+        'name': name,
         'date': date,
         'range': range,
         'time': time,

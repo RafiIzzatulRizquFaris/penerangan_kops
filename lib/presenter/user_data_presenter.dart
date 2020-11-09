@@ -14,20 +14,42 @@ class UserDataPresenter implements UserDataContractPresenter {
 
   @override
   Future<String> deleteUserData(String nrp) async {
-    QuerySnapshot snapshot = await firestore
-        .collection('user')
-        .where("nrp", isEqualTo: nrp)
-        .getDocuments();
-
-    if (snapshot.documents.isNotEmpty) {
-      await firestore
+    if (nrp != "1434236") {
+      QuerySnapshot snapshot = await firestore
           .collection('user')
-          .document(snapshot.documents[0].documentID)
-          .delete();
-      return "sucess";
-    }
+          .where("nrp", isEqualTo: nrp)
+          .getDocuments();
 
+      if (snapshot.documents.isNotEmpty) {
+        await firestore
+            .collection('user')
+            .document(snapshot.documents[0].documentID)
+            .delete();
+        return "sucess";
+      }
+    }
     return "failed";
+  }
+
+  @override
+  Future<String> addUserData(String name, String nrp, String pangkat,
+      String password, String satuan, String telephone) async {
+    CollectionReference collectionReference = firestore.collection('user');
+    DocumentReference documentReference =
+        await collectionReference.add(<String, dynamic>{
+      'isadmin': "0",
+      'name': name,
+      'nrp': nrp,
+      'pangkat': pangkat,
+      'password': password,
+      'satuan': satuan,
+      'telephone': telephone
+    });
+    if (documentReference.documentID != null) {
+      return "success";
+    } else {
+      return "Failed";
+    }
   }
 
   @override
@@ -40,7 +62,15 @@ class UserDataPresenter implements UserDataContractPresenter {
   @override
   deletingUserData(String nrp) {
     deleteUserData(nrp)
-        .then((value) => _userDataContractView.onSuccessDelete(value))
+        .then((value) => _userDataContractView.onSuccess(value))
+        .catchError((error) => _userDataContractView.onErrorUserData(error));
+  }
+
+  @override
+  addingUserdata(String name, String nrp, String pangkat, String password,
+      String satuan, String telephone) {
+    addUserData(name, nrp, pangkat, password, satuan, telephone)
+        .then((value) => _userDataContractView.onSuccess(value))
         .catchError((error) => _userDataContractView.onErrorUserData(error));
   }
 }
